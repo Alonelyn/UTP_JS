@@ -1,0 +1,149 @@
+/* Chatbot — asistente flotante. Acento esmeralda (crecimiento/guía),
+   con un anillo de pulso en el botón minimizado como única animación
+   ambiental: invita a abrir sin gritar por atención. */
+
+.chatbot-floating-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 12px 28px rgba(47, 122, 92, 0.45);
+  z-index: 1000;
+}
+
+.chatbot-floating-btn::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--emerald);
+  opacity: 0.55;
+  animation: chatbotPulse 2.2s ease-out infinite;
+}
+
+@keyframes chatbotPulse {
+  0% { transform: scale(0.9); opacity: 0.55; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.chatbot-floating-card {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 400px;
+  max-width: calc(100vw - 48px);
+  background: var(--card);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-pop);
+  animation: chatbotRise 0.3s ease;
+  z-index: 1000;
+  border: 1px solid var(--line);
+}
+
+@keyframes chatbotRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chatbot-header {
+  background: linear-gradient(120deg, var(--ink), var(--emerald));
+  color: #fdf8ee;
+  padding: 14px 16px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.chatbot-header button {
+  border-radius: 8px !important;
+}
+
+.chatbot-body {
+  height: 340px;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--paper);
+}
+
+.chat-message {
+  margin-bottom: 12px;
+  animation: chatPop 0.2s ease;
+}
+
+.chat-message.student { text-align: right; }
+
+.chat-bubble {
+  display: inline-block;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-family: var(--font-body);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.chat-message.student .chat-bubble {
+  background: var(--emerald);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-message.ia .chat-bubble {
+  background: var(--card);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+
+.chatbot-footer {
+  padding: 12px;
+  background: var(--card);
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.chatbot-input {
+  border-radius: 999px !important;
+}
+
+.chatbot-btn {
+  border-radius: 999px !important;
+  padding: 0 18px;
+}
+
+.typing {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--slate);
+  animation: chatbotTypingPulse 1.1s infinite;
+}
+
+@keyframes chatPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes chatbotTypingPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .chatbot-floating-card {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+  }
+  .chatbot-floating-btn { right: 16px; bottom: 16px; }
+}

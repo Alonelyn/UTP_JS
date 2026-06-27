@@ -1,0 +1,73 @@
+/* Usuarios — panel de administración. El formulario de alta/edición se
+   trata como una "ficha de inscripción" con cabecera azul; la lista de
+   usuarios son fichas con sello de rol coloreado por tipo de cuenta. */
+
+.usuarios-head {
+  max-width: 760px;
+  margin: 0 auto 24px;
+}
+
+.usuarios-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.usuarios-form {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.usuarios-form-head {
+  background: var(--azul);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 17px;
+  padding: 14px 20px;
+}
+
+.usuarios-form-body {
+  padding: 20px;
+}
+
+.usuarios-divisor {
+  border: none;
+  border-top: 1px dashed var(--line-strong);
+  margin: 28px 0 20px;
+}
+
+.usuarios-lista-titulo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.usuario-ficha {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.usuario-ficha .usuario-info strong {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.usuario-ficha .usuario-info p {
+  margin: 2px 0;
+  font-size: 13.5px;
+  color: var(--slate);
+}
+
+.usuario-acciones {
+  display: flex;
+  gap: 8px;
+}

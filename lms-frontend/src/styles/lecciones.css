@@ -1,0 +1,79 @@
+/* Lecciones — vista de lectura individual, tratada como página de
+   cuaderno abierta: badge de lección, bloque de código tipo pizarra. */
+
+.lesson-page {
+  min-height: calc(100vh - 56px);
+  background: var(--paper);
+  padding: 24px;
+}
+
+.lesson-full {
+  width: 100%;
+}
+
+.lesson-card {
+  width: 100%;
+  min-height: 82vh;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-pop);
+  animation: fadeUp 0.5s ease;
+  font-family: var(--font-body);
+  color: var(--ink-soft);
+}
+
+.lesson-card h1 {
+  font-family: var(--font-display);
+  color: var(--ink);
+}
+
+.lesson-card h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  margin-top: 22px;
+}
+
+.lesson-badge {
+  display: inline-block;
+  background: var(--emerald-bg);
+  color: var(--emerald);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.lesson-code {
+  background: var(--ink);
+  color: #e6efe9;
+  border-radius: 14px;
+  padding: 18px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .lesson-page {
+    padding: 12px;
+  }
+
+  .lesson-card {
+    min-height: auto;
+  }
+}

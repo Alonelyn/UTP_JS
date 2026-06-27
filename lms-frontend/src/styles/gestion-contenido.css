@@ -1,0 +1,97 @@
+/* GestionContenido — el banco de trabajo del docente: selector de curso
+   como atril, dos formularios lado a lado (tema / lección) y el
+   contenido resultante como un índice anidado tema → lección. */
+
+.gestion-head {
+  max-width: 980px;
+  margin: 0 auto 24px;
+}
+
+.gestion-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.gestion-selector {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--emerald);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+
+.gestion-selector h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.gestion-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.gestion-form {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.gestion-form-head {
+  font-family: var(--font-display);
+  font-size: 16px;
+  padding: 12px 18px;
+  color: #fff;
+}
+
+.gestion-form.tema .gestion-form-head { background: var(--azul); }
+.gestion-form.leccion .gestion-form-head { background: var(--emerald); }
+
+.gestion-form-body {
+  padding: 18px;
+}
+
+.gestion-indice-titulo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.gestion-tema-ficha h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.gestion-leccion-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 8px;
+  background: var(--paper);
+}
+
+.gestion-leccion-item strong {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-size: 14.5px;
+}
+
+.gestion-leccion-item p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--slate);
+}
+
+@media (max-width: 820px) {
+  .gestion-columnas { grid-template-columns: 1fr; }
+}

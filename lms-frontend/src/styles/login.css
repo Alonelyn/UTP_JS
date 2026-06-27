@@ -1,0 +1,92 @@
+/* Login — "carnet de acceso". Fondo de papel rayado sutil (cuaderno),
+   tarjeta con franja superior azul y sello de bienvenida. */
+
+.auth-shell {
+  min-height: calc(100vh);
+  background: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 27px,
+    var(--line) 28px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-pop);
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.auth-card.login::before {
+  content: '';
+  display: block;
+  height: 6px;
+  background: var(--azul);
+}
+
+.auth-card-body { padding: 34px 32px 30px; }
+
+.auth-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--azul);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.auth-card input.form-control {
+  margin-bottom: 14px;
+  padding: 11px 14px;
+}
+
+.auth-card .btn-primary {
+  background: var(--azul) !important;
+  border-color: var(--azul) !important;
+  padding: 11px 0;
+}
+
+.auth-card .btn-primary:hover {
+  background: #1d3257 !important;
+  border-color: #1d3257 !important;
+}
+
+.auth-footnote {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.auth-footnote a {
+  color: var(--azul);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footnote a:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .auth-card-body { padding: 26px 22px 24px; }
+}

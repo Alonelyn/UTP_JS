@@ -1,0 +1,60 @@
+/* CursosDocentes — "taller" del docente: acento esmeralda (crecimiento),
+   formulario de creación como banco de trabajo y los cursos propios
+   como fichas con lomo esmeralda, distinto del catálogo brass del
+   estudiante para reforzar que aquí se administra, no se consume. */
+
+.docente-head {
+  max-width: 760px;
+  margin: 0 auto 24px;
+}
+
+.docente-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.docente-form {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.docente-form-head {
+  background: var(--emerald);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 17px;
+  padding: 14px 20px;
+}
+
+.docente-form-body {
+  padding: 20px;
+}
+
+.docente-lista-titulo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.docente-curso-ficha h4 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.docente-curso-ficha p {
+  font-size: 14px;
+  color: var(--slate);
+  margin: 0 0 6px;
+}
+
+.docente-vacio {
+  color: var(--slate);
+  font-size: 14px;
+}

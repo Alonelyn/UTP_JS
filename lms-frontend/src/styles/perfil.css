@@ -1,0 +1,188 @@
+/* Perfil — carnet escolar: avatar centrado, franja superior dorada,
+   datos en formato de "ficha personal" con etiquetas en mono, sello
+   de puntos XP estampado en la esquina. */
+
+.perfil-shell {
+  min-height: calc(100vh - 56px);
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.carnet {
+  width: 100%;
+  max-width: 460px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+  position: relative;
+}
+
+.carnet::before {
+  content: '';
+  display: block;
+  height: 56px;
+  background: linear-gradient(120deg, var(--ink), var(--brass));
+}
+
+.carnet-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: -38px;
+}
+
+.carnet-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 4px solid var(--card);
+  object-fit: cover;
+  box-shadow: var(--shadow-card);
+  background: var(--paper-deep);
+}
+
+.carnet-body {
+  padding: 14px 30px 30px;
+  text-align: center;
+}
+
+.carnet-nombre {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--ink);
+  margin: 8px 0 2px;
+}
+
+.carnet-rol {
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.carnet-datos {
+  text-align: left;
+  border-top: 1px dashed var(--line-strong);
+  padding-top: 16px;
+}
+
+.carnet-fila {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.carnet-fila .etiqueta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.carnet-fila .valor {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.carnet-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--brass);
+  background: var(--brass-bg);
+  border: 1px dashed var(--brass);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.carnet-cerrar {
+  width: 100%;
+  margin-top: 22px;
+}
+
+.perfil-sin-sesion {
+  max-width: 420px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.perfil-card,
+.perfil-panel {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.carnet-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-weight: 800;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.perfil-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.perfil-stat {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.perfil-stat span {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.perfil-stat strong {
+  display: block;
+  color: var(--text-h);
+  font-size: 28px;
+  margin-top: 8px;
+}
+
+.perfil-curso-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+  .perfil-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

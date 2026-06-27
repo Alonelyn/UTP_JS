@@ -1,0 +1,29 @@
+/* Registro — "carnet de inscripción". Misma familia que login.css pero
+   con acento esmeralda (crecer / sumarse al curso) y franja más ancha
+   para diferenciar el rol del formulario (alta de estudiante). */
+
+.auth-card.registro::before {
+  content: '';
+  display: block;
+  height: 6px;
+  background: var(--emerald);
+}
+
+.auth-card.registro .auth-eyebrow {
+  color: var(--emerald);
+}
+
+.auth-card.registro .btn-primary {
+  background: var(--emerald) !important;
+  border-color: var(--emerald) !important;
+}
+
+.auth-card.registro .btn-primary:hover {
+  background: #235c45 !important;
+  border-color: #235c45 !important;
+}
+
+.auth-card.registro .form-control:focus {
+  border-color: var(--emerald) !important;
+  box-shadow: 0 0 0 3px var(--emerald-bg) !important;
+}

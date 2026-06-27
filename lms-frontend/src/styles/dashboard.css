@@ -1,0 +1,327 @@
+/* Dashboard — banner de bienvenida cuyo acento cambia según el rol:
+   azul (admin), esmeralda (docente) o brass (estudiante). El número
+   de avance del estudiante se muestra como un sello, no como barra
+   de progreso genérica. */
+
+.dash-banner {
+  max-width: 1080px;
+  margin: 0 auto 28px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  padding: 30px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 6px;
+  background: var(--accent);
+}
+
+.dash-banner .eyebrow { color: var(--accent); }
+.dash-banner .eyebrow::before { background: var(--accent); }
+
+.dash-banner h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--ink);
+  margin: 6px 0 4px;
+}
+
+.dash-banner p { color: var(--slate); margin: 0 0 16px; }
+
+.dash-empty {
+  max-width: 480px;
+  margin: 64px auto;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 28px;
+  box-shadow: var(--shadow-card);
+}
+
+.dash-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.dash-tile {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.18s ease;
+}
+
+.dash-tile:hover { transform: translateY(-3px); }
+
+.dash-tile h4 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.dash-tile p {
+  color: var(--slate);
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.dash-xp-sello {
+  display: inline-block;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--brass);
+  border: 1px dashed var(--brass);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--brass-bg);
+}
+
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-banner { padding: 24px 20px; }
+}
+
+.dashboard-netflix {
+  padding: 0;
+}
+
+.dash-hero {
+  min-height: 360px;
+  border-radius: 0 0 34px 34px;
+  padding: 60px 42px;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, .92), rgba(37, 99, 235, .78)),
+    radial-gradient(circle at top right, var(--accent-bg), transparent 40%);
+  color: white;
+}
+
+.dash-hero.student {
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, .96), rgba(180, 83, 9, .82)),
+    radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 36%);
+}
+
+.dash-hero.instructor {
+  background:
+    linear-gradient(135deg, rgba(6, 78, 59, .95), rgba(5, 150, 105, .8));
+}
+
+.dash-hero.admin {
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, .96), rgba(37, 99, 235, .85));
+}
+
+.dash-hero h1 {
+  color: white;
+  max-width: 760px;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1;
+}
+
+.dash-hero p {
+  color: rgba(255,255,255,.84);
+  max-width: 680px;
+  font-size: 18px;
+  margin-bottom: 22px;
+}
+
+.dash-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  padding: 28px 42px;
+}
+
+.dash-stats div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.dash-stats span {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.dash-stats strong {
+  display: block;
+  color: var(--text-h);
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+.dash-section {
+  padding: 18px 42px 28px;
+}
+
+.dash-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dash-section h2 {
+  margin-bottom: 16px;
+}
+
+.dash-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.dash-course-card,
+.dash-empty-card {
+  min-width: 280px;
+  max-width: 320px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.dash-course-card span {
+  display: inline-block;
+  background: var(--accent-bg);
+  color: var(--accent);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.dash-course-card h3 {
+  color: var(--text-h);
+}
+
+.dash-course-card p {
+  min-height: 72px;
+}
+
+.dash-course-card.owned {
+  border-color: var(--emerald);
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.dash-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.dash-tile.premium {
+  min-height: 170px;
+}
+
+.dash-plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.dash-plan {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: var(--shadow);
+}
+
+.dash-plan span {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.dash-plan h3 {
+  font-size: 36px;
+  margin: 12px 0;
+}
+
+.dash-plan.golden {
+  border-color: var(--brass);
+  transform: translateY(-8px);
+}
+
+@media (max-width: 900px) {
+  .dash-stats,
+  .dash-grid,
+  .dash-plans {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-hero,
+  .dash-section,
+  .dash-stats {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.dash-plan-active {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  color: var(--text-h);
+  border-radius: 18px;
+  padding: 16px 18px;
+}
+
+.dash-plan.activo {
+  border: 2px solid var(--emerald);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15), var(--shadow);
+  animation: planPulse 1.8s ease-in-out infinite;
+}
+
+.dash-plan.activo::after {
+  content: '✓ Suscrito';
+  display: inline-block;
+  margin-top: 12px;
+  background: rgba(52, 211, 153, 0.16);
+  color: var(--emerald);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+@keyframes planPulse {
+  0%, 100% {
+    transform: translateY(-4px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}

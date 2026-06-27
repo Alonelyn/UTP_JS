@@ -1,0 +1,77 @@
+/* Cursos — catálogo de lectura. Cada curso se presenta como un libro:
+   lomo de color a la izquierda (acento brass), precio como etiqueta
+   de "S/" colgante en la esquina, nivel y estado como sellos. */
+
+.cursos-head {
+  max-width: 980px;
+  margin: 0 auto 28px;
+}
+
+.cursos-grid {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.curso-libro {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 10px solid var(--brass);
+  border-radius: 10px 14px 14px 10px;
+  box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.curso-libro:hover {
+  transform: translateX(3px) translateY(-2px);
+  box-shadow: var(--shadow-pop);
+}
+
+.curso-libro h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  padding-right: 64px;
+}
+
+.curso-libro .curso-desc {
+  font-size: 14px;
+  color: var(--slate);
+  margin-bottom: 10px;
+}
+
+.curso-libro .curso-slug {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--slate);
+  margin-bottom: 10px;
+}
+
+.curso-precio {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--brass);
+  background: var(--brass-bg);
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.cursos-vacio {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  color: var(--slate);
+}
+
+@media (max-width: 760px) {
+  .cursos-grid { grid-template-columns: 1fr; }
+}

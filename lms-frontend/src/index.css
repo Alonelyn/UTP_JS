@@ -1,0 +1,251 @@
+:root {
+  --text: #475569;
+  --text-h: #0f172a;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --code-bg: #0f172a;
+
+  --accent: #2563eb;
+  --accent-bg: rgba(37, 99, 235, 0.1);
+  --accent-border: rgba(37, 99, 235, 0.45);
+
+  --azul: #2563eb;
+  --emerald: #059669;
+  --brass: #b45309;
+  --coral: #dc2626;
+
+  --shadow:
+    rgba(15, 23, 42, 0.08) 0 10px 15px -3px,
+    rgba(15, 23, 42, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="dark"] {
+  --text: #cbd5e1;
+  --text-h: #f8fafc;
+  --bg: #020617;
+  --surface: #0f172a;
+  --border: #1e293b;
+  --code-bg: #020617;
+
+  --accent: #60a5fa;
+  --accent-bg: rgba(96, 165, 250, 0.15);
+  --accent-border: rgba(96, 165, 250, 0.45);
+
+  --azul: #60a5fa;
+  --emerald: #34d399;
+  --brass: #fbbf24;
+  --coral: #fb7185;
+
+  --shadow:
+    rgba(0, 0, 0, 0.45) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.35) 0 4px 6px -2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading);
+  color: var(--text-h);
+}
+
+p {
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+}
+
+code,
+pre {
+  font-family: var(--mono);
+}
+
+.page-shell {
+  min-height: calc(100vh - 56px);
+  width: 100%;
+  padding: 28px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  color: var(--text);
+}
+
+.card,
+.ficha,
+.modal-content,
+.usuarios-form,
+.gestion-form,
+.gestion-selector,
+.curso-libro,
+.lesson-card,
+.chatbot-floating-card {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.card,
+.ficha,
+.usuarios-form,
+.gestion-form,
+.gestion-selector,
+.curso-libro {
+  box-shadow: var(--shadow);
+}
+
+.page-title,
+.usuarios-head h1,
+.admin-head h1,
+.gestion-head h1,
+.cursos-head h1 {
+  color: var(--text-h);
+}
+
+.page-sub,
+.text-muted,
+.eyebrow {
+  color: var(--text) !important;
+}
+
+input,
+select,
+textarea,
+.form-control {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #64748b !important;
+}
+
+.table {
+  color: var(--text) !important;
+}
+
+.table td,
+.table th {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.table-dark th {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.alert {
+  border-radius: 14px;
+}
+
+pre,
+.lesson-code {
+  background: var(--code-bg) !important;
+  color: #e5e7eb !important;
+}
+
+.sello {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sello-azul {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--azul);
+}
+
+.sello-emerald {
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--emerald);
+}
+
+.sello-brass {
+  background: rgba(180, 83, 9, 0.12);
+  color: var(--brass);
+}
+
+.sello-coral {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--coral);
+}
+
+[data-theme="dark"] .navbar {
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="dark"] .btn-outline-light {
+  border-color: #475569;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+  border-color: #475569;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .modal {
+  color: var(--text);
+}
+
+[data-theme="dark"] .loader-overlay {
+  background: rgba(2, 6, 23, 0.88);
+}
+
+[data-theme="dark"] .loader-card {
+  background: var(--surface);
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: 16px;
+  }
+}
