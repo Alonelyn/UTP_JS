@@ -21,6 +21,7 @@ import Progreso from './pages/Progreso';
 import VerificarCorreo from './pages/VerificarCorreo';
 import LoaderBridge from './components/LoaderBridge';
 import EditorContenido from './pages/docente/EditorContenido';
+import Landing from './pages/Landing';
 
 
 function Layout() {
@@ -41,8 +42,9 @@ function Layout() {
       {!ocultarNavbar && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Landing />} />
         <Route path='/login' element={<Login />} />
+        <Route path="/" element={<Landing />} />
         <Route path='/docente/cursos' element={<CursosDocente />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path="/docente/contenido" element={<GestionContenido />} />

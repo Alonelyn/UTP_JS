@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import '../styles/dashboard.css';
+import OnboardingTour from '../components/OnboardingTour';
 
 function Dashboard() {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
 
+  const [mostrarTour, setMostrarTour] = useState(false);
   const [cursos, setCursos] = useState([]);
   const [inscripciones, setInscripciones] = useState([]);
   const [suscripcion, setSuscripcion] = useState(null);
@@ -65,6 +67,15 @@ function Dashboard() {
 
   useEffect(() => {
     cargarDatos();
+
+    if (usuario && usuario.rol === 'estudiate') {
+      const tourVisto = localStorage.getItem(`tourVisto_${usuario.id}`);
+
+      if (!tourVisto) {
+        setMostrarTour(true);
+      }
+    }
+
   }, []);
 
   const abrirPagoPlan = (plan) => {
@@ -242,6 +253,14 @@ function Dashboard() {
             <Link className="btn btn-outline-light" to="/progreso">
               Ver mi progreso
             </Link>
+
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => setMostrarTour(true)}
+            >
+              Ver tour guiado
+            </button>
           </div>
         </div>
       </div>
@@ -475,6 +494,10 @@ function Dashboard() {
             </div>
           </div>
         </div>
+      )}
+
+      {mostrarTour && (
+        <OnboardingTour onClose={() => setMostrarTour(false)} />
       )}
     </div>
   );

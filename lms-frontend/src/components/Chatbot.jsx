@@ -70,8 +70,10 @@ function Chatbot({ contextoLeccion }) {
       .slice(0,6000);
   };
 
-  const enviarPregunta = async (e) => {
+  const enviarPregunta = async (e, mensajeRapido = null) => {
     e.preventDefault();
+
+    const texto = mensajeRapido || pregunta;
 
     if (!pregunta.trim()) return;
 
@@ -90,9 +92,18 @@ function Chatbot({ contextoLeccion }) {
       const contextoPagina = obtenerContextoPagina();
 
       const response = await api.post('/ia/chat', {
-        mensaje: textoPregunta,
+        mensaje: input,
         paginaActual: location.pathname,
-        contextoLeccion: contextoPagina || contextoLeccion,
+        usuario: {
+          id: usuario?.id,
+          nombre: usuario?.nombre,
+          rol: usuario?.rol
+        },
+        cursoActual,
+        moduloActual,
+        leccionActual,
+        progresoActual,
+        contextoLeccion
       });
 
       const respuestaIA = {
@@ -129,6 +140,18 @@ function Chatbot({ contextoLeccion }) {
     );
   }
 
+  const enviarPreguntaRapida = (texto) => {
+  setPregunta(texto);
+
+  setTimeout(() => {
+    enviarPregunta({
+      preventDefault: () => {}
+    }, texto);
+  }, 100);
+};
+
+
+
   return (
     <div className="chatbot-floating-card">
       <div className="chatbot-header d-flex justify-content-between align-items-center">
@@ -160,7 +183,43 @@ function Chatbot({ contextoLeccion }) {
 
         {cargando && <div className="typing">La IA está pensando...</div>}
       </div>
+      <div className="chatbot-tools">
+        <button
+          className="btn btn-outline-primary btn-sm"
+          onClick={() =>
+            enviarPreguntaRapida('Explícame esta lección de forma sencilla.')
+          }
+        >
+          📚 Explicar
+        </button>
 
+        <button
+          className="btn btn-outline-success btn-sm"
+          onClick={() =>
+            enviarPreguntaRapida('Dame un ejercicio relacionado con esta lección.')
+          }
+        >
+          💻 Ejercicio
+        </button>
+
+        <button
+          className="btn btn-outline-warning btn-sm"
+          onClick={() =>
+            enviarPreguntaRapida('Hazme preguntas tipo examen sobre esta lección.')
+          }
+        >
+          📝 Evaluarme
+        </button>
+
+        <button
+          className="btn btn-outline-info btn-sm"
+          onClick={() =>
+            enviarPreguntaRapida('¿Qué recursos recomiendas para profundizar este tema?')
+          }
+        >
+          🚀 Recursos
+        </button>
+      </div>
       <form onSubmit={enviarPregunta} className="chatbot-footer">
         <input
           className="form-control chatbot-input"
@@ -172,6 +231,18 @@ function Chatbot({ contextoLeccion }) {
         <button className="btn btn-primary chatbot-btn" type="submit">
           Enviar
         </button>
+
+        <button
+            className="btn btn-danger chatbot-special"
+            onClick={() =>
+                enviarPreguntaRapida(
+                    'Actúa como mi tutor personal. Analiza esta lección, identifica mis posibles dificultades, recomiéndame recursos adicionales, genera un ejercicio práctico y un mini examen.'
+                )
+            }
+        >
+            🎓 Tutor IA
+        </button>
+        
       </form>
     </div>
   );

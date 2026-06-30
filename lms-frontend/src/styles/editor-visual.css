@@ -1,0 +1,128 @@
+.editor-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr 360px;
+  gap: 20px;
+  align-items: start;
+}
+
+.editor-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.editor-panel h3,
+.editor-panel h4 {
+  color: var(--text-h);
+}
+
+.editor-course-select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}
+
+.editor-tree {
+  display: grid;
+  gap: 14px;
+}
+
+.editor-module {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  background: var(--bg);
+}
+
+.editor-module-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.editor-module-title {
+  font-weight: 800;
+  color: var(--text-h);
+}
+
+.editor-lesson-item {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.editor-lesson-item:hover {
+  transform: translateX(4px);
+  border-color: var(--accent);
+}
+
+.editor-lesson-item.active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.editor-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.editor-full {
+  grid-column: 1 / -1;
+}
+
+.editor-preview {
+  position: sticky;
+  top: 90px;
+}
+
+.preview-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.preview-video {
+  height: 180px;
+  border-radius: 16px;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 14px 0;
+}
+
+.preview-content {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.editor-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text);
+}
+
+@media (max-width: 1200px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-preview {
+    position: static;
+  }
+}

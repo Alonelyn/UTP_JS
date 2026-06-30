@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import '../../styles/editor-visual.css';
 
 function EditorContenido() {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -125,19 +126,23 @@ function EditorContenido() {
     <div className="page-shell" data-ai-context="true">
       <div className="gestion-head">
         <p className="eyebrow">Editor docente</p>
-        <h1 className="page-title">Editor visual de contenido</h1>
+        <h1 className="page-title">Constructor visual de contenido</h1>
         <p className="page-sub">
-          Edita temas, lecciones, puntos, XP y recursos de apoyo.
+          Organiza cursos, temas, lecciones, videos, puntos y XP desde una vista completa.
         </p>
       </div>
 
-      <div className="card p-4 mb-4">
+      <div className="editor-course-select">
         <h4>Seleccionar curso</h4>
 
         <select
           className="form-control"
           value={cursoId}
-          onChange={(e) => setCursoId(e.target.value)}
+          onChange={(e) => {
+            setCursoId(e.target.value);
+            setModuloEditando(null);
+            setLeccionEditando(null);
+          }}
         >
           <option value="">Selecciona un curso</option>
 
@@ -149,243 +154,353 @@ function EditorContenido() {
         </select>
       </div>
 
-      {cursoId && (
-        <div className="row">
-          <div className="col-md-5">
-            <div className="card p-4 mb-4">
-              <h4>{moduloEditando ? 'Editar tema/módulo' : 'Selecciona un tema'}</h4>
+      {!cursoId ? (
+        <div className="editor-empty editor-panel">
+          <h3>Selecciona un curso para comenzar</h3>
+          <p>
+            Aquí podrás editar visualmente sus temas, lecciones, recursos y experiencia del estudiante.
+          </p>
+        </div>
+      ) : (
+        <div className="editor-layout">
+          <aside className="editor-panel">
+            <h3>Estructura del curso</h3>
+            <p className="text-muted">
+              Selecciona un tema o lección para editar.
+            </p>
 
-              {moduloEditando ? (
-                <form onSubmit={actualizarModulo}>
-                  <input
-                    className="form-control mb-2"
-                    placeholder="Título del tema"
-                    value={formModulo.titulo}
-                    onChange={(e) =>
-                      setFormModulo({ ...formModulo, titulo: e.target.value })
-                    }
-                  />
-
-                  <input
-                    className="form-control mb-2"
-                    type="number"
-                    placeholder="Orden"
-                    value={formModulo.orden}
-                    onChange={(e) =>
-                      setFormModulo({ ...formModulo, orden: Number(e.target.value) })
-                    }
-                  />
-                  <small className="text-muted d-block mb-2">
-                    El orden define la posición del tema dentro del curso. Ejemplo: 1, 2, 3...
-                  </small>
-
-                  <button className="btn btn-success me-2" type="submit">
-                    Guardar tema
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setModuloEditando(null)}
-                  >
-                    Cancelar
-                  </button>
-                </form>
-              ) : (
-                <p className="text-muted">
-                  Elige un tema de la lista inferior para editarlo.
-                </p>
+            <div className="editor-tree">
+              {modulosCurso.length === 0 && (
+                <p>No hay temas registrados en este curso.</p>
               )}
-            </div>
 
-            {modulosCurso.map((modulo) => (
-              <div key={modulo.id} className="card p-3 mb-3">
-                <h5>
-                  Tema {modulo.orden}: {modulo.titulo}
-                </h5>
-
-                <div className="d-flex gap-2 flex-wrap">
-                  <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => cargarModulo(modulo)}
-                  >
-                    Editar tema
-                  </button>
-
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => eliminarModulo(modulo.id)}
-                  >
-                    Eliminar tema
-                  </button>
-                </div>
-
-                <hr />
-
-                {lecciones
+              {modulosCurso.map((modulo) => {
+                const leccionesModulo = lecciones
                   .filter((l) => l.modulo_id === modulo.id)
-                  .sort((a, b) => a.orden - b.orden)
-                  .map((leccion) => (
-                    <div key={leccion.id} className="border rounded p-2 mb-2">
-                      <strong>
-                        Lección {leccion.orden}: {leccion.titulo}
-                      </strong>
+                  .sort((a, b) => a.orden - b.orden);
 
-                      <p className="mb-1">
-                        Tipo: {leccion.tipo} · Puntos: {leccion.puntos_otorgados}
-                      </p>
-
-                      <button
-                        className="btn btn-primary btn-sm me-2"
-                        onClick={() => cargarLeccion(leccion)}
-                      >
-                        Editar lección
-                      </button>
+                return (
+                  <div key={modulo.id} className="editor-module">
+                    <div className="editor-module-head">
+                      <div>
+                        <div className="editor-module-title">
+                          Tema {modulo.orden}: {modulo.titulo}
+                        </div>
+                        <small>{leccionesModulo.length} lección(es)</small>
+                      </div>
 
                       <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => eliminarLeccion(leccion.id)}
+                        className="btn btn-warning btn-sm"
+                        onClick={() => cargarModulo(modulo)}
                       >
-                        Eliminar
+                        Editar
                       </button>
                     </div>
-                  ))}
-              </div>
-            ))}
-          </div>
 
-          <div className="col-md-7">
-            <div className="card p-4">
-              <h4>
-                {leccionEditando
-                  ? 'Editar lección'
-                  : 'Selecciona una lección para editar'}
-              </h4>
+                    {leccionesModulo.map((leccion) => (
+                      <div
+                        key={leccion.id}
+                        className={`editor-lesson-item ${
+                          leccionEditando === leccion.id ? 'active' : ''
+                        }`}
+                        onClick={() => cargarLeccion(leccion)}
+                      >
+                        <strong>
+                          Lección {leccion.orden}: {leccion.titulo}
+                        </strong>
 
-              {leccionEditando ? (
+                        <div>
+                          <small>
+                            {leccion.tipo} · {leccion.puntos_otorgados} pts · XP {leccion.xp_otorgada || leccion.puntos_otorgados}
+                          </small>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </aside>
+
+          <main className="editor-panel">
+            {moduloEditando && (
+              <>
+                <h3>Editar tema / módulo</h3>
+
+                <form onSubmit={actualizarModulo}>
+                  <div className="editor-form-grid">
+                    <div className="editor-full">
+                      <label className="form-label">Título del tema</label>
+                      <input
+                        className="form-control"
+                        value={formModulo.titulo}
+                        onChange={(e) =>
+                          setFormModulo({ ...formModulo, titulo: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">Orden</label>
+                      <input
+                        className="form-control"
+                        type="number"
+                        value={formModulo.orden}
+                        onChange={(e) =>
+                          setFormModulo({
+                            ...formModulo,
+                            orden: Number(e.target.value)
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <small className="text-muted d-block mt-2">
+                    El orden define la posición del tema dentro del curso.
+                  </small>
+
+                  <div className="d-flex gap-2 mt-3">
+                    <button className="btn btn-success" type="submit">
+                      Guardar tema
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => setModuloEditando(null)}
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => eliminarModulo(moduloEditando)}
+                    >
+                      Eliminar tema
+                    </button>
+                  </div>
+                </form>
+
+                <hr />
+              </>
+            )}
+
+            {leccionEditando ? (
+              <>
+                <h3>Editar lección</h3>
+
                 <form onSubmit={actualizarLeccion}>
-                    <label className="form-label">Tema / módulo de la lección</label>
-                    <select
-                        className="form-control mb-2"
+                  <div className="editor-form-grid">
+                    <div className="editor-full">
+                      <label className="form-label">Tema / módulo</label>
+                      <select
+                        className="form-control"
                         value={formLeccion.modulo_id}
                         onChange={(e) =>
-                        setFormLeccion({ ...formLeccion, modulo_id: e.target.value })
+                          setFormLeccion({
+                            ...formLeccion,
+                            modulo_id: e.target.value
+                          })
                         }
-                    >
+                      >
                         <option value="">Selecciona tema/módulo</option>
 
                         {modulosCurso.map((modulo) => (
-                        <option key={modulo.id} value={modulo.id}>
+                          <option key={modulo.id} value={modulo.id}>
                             Tema {modulo.orden}: {modulo.titulo}
-                        </option>
+                          </option>
                         ))}
-                    </select>
+                      </select>
+                    </div>
 
-                    <small className="text-muted d-block mb-3">
-                        Este campo evita que la lección se salga del curso al editarla.
-                    </small>
-
-                    <input
-                        className="form-control mb-2"
-                        placeholder="Título de la lección"
+                    <div className="editor-full">
+                      <label className="form-label">Título de la lección</label>
+                      <input
+                        className="form-control"
                         value={formLeccion.titulo}
                         onChange={(e) =>
-                        setFormLeccion({ ...formLeccion, titulo: e.target.value })
+                          setFormLeccion({
+                            ...formLeccion,
+                            titulo: e.target.value
+                          })
                         }
-                    />
+                      />
+                    </div>
 
-                    <select
-                        className="form-control mb-2"
+                    <div>
+                      <label className="form-label">Tipo</label>
+                      <select
+                        className="form-control"
                         value={formLeccion.tipo}
                         onChange={(e) =>
-                        setFormLeccion({ ...formLeccion, tipo: e.target.value })
+                          setFormLeccion({
+                            ...formLeccion,
+                            tipo: e.target.value
+                          })
                         }
-                    >
+                      >
                         <option value="texto">Texto</option>
                         <option value="video">Video</option>
                         <option value="examen">Examen</option>
                         <option value="interactivo">Interactivo</option>
-                    </select>
+                      </select>
+                    </div>
 
-                    <input
-                        className="form-control mb-2"
+                    <div>
+                      <label className="form-label">Orden</label>
+                      <input
+                        className="form-control"
                         type="number"
-                        placeholder="Orden de la lección"
                         value={formLeccion.orden}
                         onChange={(e) =>
-                        setFormLeccion({ ...formLeccion, orden: Number(e.target.value) })
+                          setFormLeccion({
+                            ...formLeccion,
+                            orden: Number(e.target.value)
+                          })
                         }
-                    />
+                      />
+                    </div>
 
-                    <input
-                        className="form-control mb-2"
+                    <div>
+                      <label className="form-label">Puntos</label>
+                      <input
+                        className="form-control"
                         type="number"
-                        placeholder="Puntos de la lección"
                         value={formLeccion.puntos_otorgados}
                         onChange={(e) =>
-                        setFormLeccion({
+                          setFormLeccion({
                             ...formLeccion,
                             puntos_otorgados: Number(e.target.value)
-                        })
+                          })
                         }
-                    />
+                      />
+                    </div>
 
-                    <input
-                        className="form-control mb-2"
+                    <div>
+                      <label className="form-label">XP otorgada</label>
+                      <input
+                        className="form-control"
                         type="number"
-                        placeholder="XP otorgada"
                         value={formLeccion.xp_otorgada}
                         onChange={(e) =>
-                        setFormLeccion({
+                          setFormLeccion({
                             ...formLeccion,
                             xp_otorgada: Number(e.target.value)
-                        })
+                          })
                         }
-                    />
+                      />
+                    </div>
 
-                    <input
-                        className="form-control mb-2"
-                        placeholder="URL de video simulado o recurso"
+                    <div className="editor-full">
+                      <label className="form-label">URL de video o recurso</label>
+                      <input
+                        className="form-control"
+                        placeholder="https://..."
                         value={formLeccion.video_url}
                         onChange={(e) =>
-                        setFormLeccion({ ...formLeccion, video_url: e.target.value })
+                          setFormLeccion({
+                            ...formLeccion,
+                            video_url: e.target.value
+                          })
                         }
-                    />
+                      />
+                    </div>
 
-                    <textarea
-                        className="form-control mb-3"
-                        rows="10"
-                        placeholder="Contenido completo de la lección"
+                    <div className="editor-full">
+                      <label className="form-label">Contenido de la lección</label>
+                      <textarea
+                        className="form-control"
+                        rows="12"
                         value={formLeccion.contenido_texto}
                         onChange={(e) =>
-                        setFormLeccion({
+                          setFormLeccion({
                             ...formLeccion,
                             contenido_texto: e.target.value
-                        })
+                          })
                         }
-                    />
-
-                    <div className="d-flex gap-2">
-                        <button className="btn btn-success" type="submit">
-                        Guardar lección
-                        </button>
-
-                        <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => setLeccionEditando(null)}
-                        >
-                        Cancelar
-                        </button>
+                      />
                     </div>
-                    </form>
-              ) : (
-                <p className="text-muted">
-                  Desde aquí podrás modificar el contenido, puntos, XP y video de cada lección.
+                  </div>
+
+                  <div className="d-flex gap-2 mt-3 flex-wrap">
+                    <button className="btn btn-success" type="submit">
+                      Guardar lección
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => setLeccionEditando(null)}
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => eliminarLeccion(leccionEditando)}
+                    >
+                      Eliminar lección
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : !moduloEditando ? (
+              <div className="editor-empty">
+                <h3>Selecciona una lección</h3>
+                <p>
+                  Desde aquí podrás editar contenido, tipo, puntos, XP, video y módulo relacionado.
                 </p>
-              )}
-            </div>
-          </div>
+              </div>
+            ) : null}
+          </main>
+
+          <aside className="editor-panel editor-preview">
+            <h3>Vista previa</h3>
+            <p className="text-muted">
+              Así se verá la lección para el estudiante.
+            </p>
+
+            {leccionEditando ? (
+              <div className="preview-card">
+                <span className="badge bg-primary mb-2">
+                  {formLeccion.tipo}
+                </span>
+
+                <h4>{formLeccion.titulo || 'Título de la lección'}</h4>
+
+                <p>
+                  <strong>Puntos:</strong> {formLeccion.puntos_otorgados} ·{' '}
+                  <strong>XP:</strong> {formLeccion.xp_otorgada}
+                </p>
+
+                <div className="preview-video">
+                  {formLeccion.video_url ? (
+                    <div>
+                      <strong>Video / recurso agregado</strong>
+                      <br />
+                      <small>{formLeccion.video_url}</small>
+                    </div>
+                  ) : (
+                    <div>
+                      <h2>▶</h2>
+                      <p>Video simulado</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="preview-content">
+                  {formLeccion.contenido_texto || 'Contenido de la lección...'}
+                </div>
+              </div>
+            ) : (
+              <div className="preview-card">
+                <p>Selecciona una lección para ver su vista previa.</p>
+              </div>
+            )}
+          </aside>
         </div>
       )}
     </div>
