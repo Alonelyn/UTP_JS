@@ -252,6 +252,7 @@ function LeccionDetalle() {
 
       <RecursosExternos
         terminoInicial={`${curso.titulo} ${leccion.titulo}`}
+        leccionId={leccion.id}
         autoBuscar={true}
       />
 

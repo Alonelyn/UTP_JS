@@ -1,7 +1,10 @@
 const buscarRepositoriosGithub = async (query) => {
   const url = new URL('https://api.github.com/search/repositories');
 
-  url.searchParams.set('q', `${query} in:name,description`);
+  url.searchParams.set(
+    'q',
+    `${query} tutorial example course exercise in:name,description,readme`
+  );
   url.searchParams.set('sort', 'stars');
   url.searchParams.set('order', 'desc');
   url.searchParams.set('per_page', '6');
