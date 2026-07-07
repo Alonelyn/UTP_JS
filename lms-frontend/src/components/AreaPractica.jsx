@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import api from '../api/axios';
 
 function AreaPractica({ leccion }) {
@@ -223,25 +224,25 @@ console.log(calcularDoble(5));`;
     try {
       const response = await api.post('/ia/chat', {
         mensaje: `
-Revisa este desarrollo práctico del estudiante.
+          Revisa este desarrollo práctico del estudiante.
 
-Lección:
-${leccion?.titulo}
+          Lección:
+          ${leccion?.titulo}
 
-Reto:
-${obtenerReto()}
+          Reto:
+          ${obtenerReto()}
 
-Código del estudiante:
-${codigo}
+          Código del estudiante:
+          ${codigo}
 
-Salida obtenida:
-${salida || 'El estudiante todavía no ejecutó el código.'}
+          Salida obtenida:
+          ${salida || 'El estudiante todavía no ejecutó el código.'}
 
-Indica:
-1. Qué está bien.
-2. Qué está mal.
-3. Qué puede mejorar.
-4. Una pista útil sin resolver todo directamente.
+          Indica:
+          1. Qué está bien.
+          2. Qué está mal.
+          3. Qué puede mejorar.
+          4. Una pista útil sin resolver todo directamente.
         `,
         paginaActual: '/lecciones',
         contextoLeccion: leccion?.contenido_texto || ''
@@ -309,8 +310,15 @@ Indica:
         <div className="alert alert-info">
           <strong>Feedback de UTP-BOOT:</strong>
 
-          <div style={{ whiteSpace: 'pre-wrap' }}>
-            {feedback}
+          <div className="mt-2">
+            <ReactMarkdown>
+              {feedback
+                .replaceAll('<br>', '\n')
+                .replaceAll('<br/>', '\n')
+                .replaceAll('<br />', '\n')
+                .replaceAll('<strong>', '**')
+                .replaceAll('</strong>', '**')}
+            </ReactMarkdown>
           </div>
         </div>
       )}

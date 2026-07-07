@@ -41,9 +41,9 @@ function Landing() {
           <div className="preview-card">
             <strong>Progreso</strong>
             <div className="fake-progress">
-              <span style={{ width: '72%' }}></span>
+              <span style={{ width: '95%' }}></span>
             </div>
-            <small>72% completado</small>
+            <small>95% completado</small>
           </div>
         </div>
       </section>
@@ -123,7 +123,7 @@ function Landing() {
       <section className="landing-section">
         <div className="landing-section-head">
           <span>Planes</span>
-          <h2>Escala tu aprendizaje</h2>
+          <h2>Tutor UTP-BOOT 🤖</h2>
         </div>
 
         <div className="landing-grid three">

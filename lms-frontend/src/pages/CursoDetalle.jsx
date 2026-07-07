@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import api from '../api/axios';
 
 function CursoDetalle() {
-  const { id } = useParams();
+  const { cursoSlug } = useParams();
   const usuario = JSON.parse(localStorage.getItem('usuario'));
 
   const [curso, setCurso] = useState(null);
@@ -15,7 +15,13 @@ function CursoDetalle() {
   const cargarDatos = async () => {
     try {
       const cursosRes = await api.get('/cursos');
-      const cursoActual = cursosRes.data.find((c) => c.id === id);
+      const cursoActual = cursosRes.data.find((c) => c.slug === cursoSlug);
+
+      if (!cursoActual) {
+        setCurso(null);
+        return;
+      }
+
       setCurso(cursoActual);
 
       const insRes = await api.get('/inscripciones');
@@ -24,33 +30,39 @@ function CursoDetalle() {
         usuario?.rol === 'admin' ||
         usuario?.rol === 'instructor' ||
         insRes.data.some(
-          (i) => i.usuario_id === usuario?.id && i.curso_id === id
+          (i) => i.usuario_id === usuario?.id && i.curso_id === cursoActual.id
         );
 
       setTieneAcceso(acceso);
 
       if (usuario?.rol === 'estudiante') {
-        const progresoRes = await api.get(`/progreso/${usuario.id}/${id}`);
+        const progresoRes = await api.get(
+          `/progreso/${usuario.id}/${cursoActual.id}`
+        );
         setProgreso(progresoRes.data);
       }
 
       const modulosRes = await api.get('/modulos');
-      const modulosCurso = modulosRes.data
-        .filter((m) => m.curso_id === id)
+
+      const modulosDelCurso = modulosRes.data
+        .filter((m) => m.curso_id === cursoActual.id)
         .sort((a, b) => a.orden - b.orden);
 
-      setModulos(modulosCurso);
+      setModulos(modulosDelCurso);
 
       const leccionesRes = await api.get('/lecciones');
       setLecciones(leccionesRes.data);
     } catch (error) {
-      console.error('Error al cargar detalle del curso:', error.response?.data || error.message);
+      console.error(
+        'Error al cargar detalle del curso:',
+        error.response?.data || error.message
+      );
     }
   };
 
   useEffect(() => {
     cargarDatos();
-  }, [id]);
+  }, [cursoSlug]);
 
   if (!curso) {
     return <div className="container mt-4">Cargando curso...</div>;
@@ -132,7 +144,9 @@ function CursoDetalle() {
             <div key={modulo.id} className="accordion-item mb-3">
               <h2 className="accordion-header" id={`heading-${modulo.id}`}>
                 <button
-                  className={`accordion-button ${moduloIndex !== 0 ? 'collapsed' : ''}`}
+                  className={`accordion-button ${
+                    moduloIndex !== 0 ? 'collapsed' : ''
+                  }`}
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target={`#collapse-${modulo.id}`}
@@ -153,7 +167,9 @@ function CursoDetalle() {
 
               <div
                 id={`collapse-${modulo.id}`}
-                className={`accordion-collapse collapse ${moduloIndex === 0 ? 'show' : ''}`}
+                className={`accordion-collapse collapse ${
+                  moduloIndex === 0 ? 'show' : ''
+                }`}
                 aria-labelledby={`heading-${modulo.id}`}
                 data-bs-parent="#accordionTemas"
               >
@@ -171,7 +187,10 @@ function CursoDetalle() {
                       );
 
                       return (
-                        <div key={leccion.id} className="border rounded p-3 mb-2">
+                        <div
+                          key={leccion.id}
+                          className="border rounded p-3 mb-2"
+                        >
                           <div className="d-flex justify-content-between align-items-start gap-3 flex-wrap">
                             <div>
                               <h5>
@@ -185,8 +204,12 @@ function CursoDetalle() {
 
                               <p className="mb-1">
                                 <strong>Tipo:</strong> {leccion.tipo} |{' '}
-                                <strong>Puntos:</strong> {leccion.puntos_otorgados} |{' '}
-                                <strong>XP:</strong> {leccion.xp_otorgada ?? leccion.puntos_otorgados ?? 10}
+                                <strong>Puntos:</strong>{' '}
+                                {leccion.puntos_otorgados} |{' '}
+                                <strong>XP:</strong>{' '}
+                                {leccion.xp_otorgada ??
+                                  leccion.puntos_otorgados ??
+                                  10}
                               </p>
 
                               {leccion.video_url && (
@@ -202,7 +225,7 @@ function CursoDetalle() {
                                   ? 'btn-outline-success'
                                   : 'btn-success'
                               }`}
-                              to={`/cursos/${curso.id}/lecciones/${leccion.id}`}
+                              to={`/cursos/${curso.slug}/lecciones/${leccion.slug}`}
                             >
                               {leccionProgreso?.completado
                                 ? 'Revisar lección'

@@ -55,12 +55,13 @@ function Layout() {
         <Route path="/modulos" element={<Modulos />} />
         <Route path="/lecciones" element={<Lecciones />} />
         <Route path="/perfil" element={<Perfil />} />
-        <Route path="/cursos/:cursoId/lecciones/:leccionId" element={<LeccionDetalle />} />
-        <Route path="/cursos/:id" element={<CursoDetalle />} />
+        <Route path="/cursos/:cursoSlug" element={<CursoDetalle />} />
+        <Route path="/cursos/:cursoSlug/lecciones/:leccionSlug" element={<LeccionDetalle />} />
         <Route path="/admin/inscripciones" element={<InscripcionesAdmin />} />
         <Route path="/progreso" element={<Progreso />} />
         <Route path="/verificar-correo" element={<VerificarCorreo />} />
         <Route path="/docente/editor-contenido" element={<EditorContenido />} />
+        
       </Routes>
 
       {!ocultarNavbar && 

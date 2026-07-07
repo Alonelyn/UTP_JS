@@ -182,7 +182,7 @@ function Cursos() {
     if (usuario?.rol === 'admin' || usuario?.rol === 'instructor') {
       return (
         <>
-          <Link className="btn btn-dark w-100" to={`/cursos/${curso.id}`}>
+          <Link className="btn btn-dark w-100" to={`/cursos/${curso.slug}`}>
             Ver curso
           </Link>
 
@@ -198,7 +198,7 @@ function Cursos() {
 
     if (comprado) {
       return (
-        <Link className="btn btn-success w-100" to={`/cursos/${curso.id}`}>
+        <Link className="btn btn-success w-100" to={`/cursos/${curso.slug}`}>
           Entrar al curso
         </Link>
       );
@@ -213,6 +213,8 @@ function Cursos() {
       </button>
     );
   };
+
+  console.log(cursos);
 
   return (
     <div className="page-shell" data-ai-context="true">

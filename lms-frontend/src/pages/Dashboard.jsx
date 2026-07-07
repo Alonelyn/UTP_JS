@@ -308,7 +308,7 @@ function Dashboard() {
                 <span>En progreso</span>
                 <h3>{curso.titulo}</h3>
                 <p>{curso.descripcion}</p>
-                <Link className="btn btn-success" to={`/cursos/${curso.id}`}>
+                <Link className="btn btn-success" to={`/cursos/${curso.slug}`}>
                   Continuar
                 </Link>
               </div>
