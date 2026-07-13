@@ -4,7 +4,7 @@
 
 .admin-head {
   max-width: 1080px;
-  margin: 0 auto 30px;
+  margin: 0 auto 28px;
   text-align: left;
 }
 
@@ -13,6 +13,56 @@
   margin: 64px auto;
 }
 
+/* ─── Estadísticas globales ──────────────────────────────────── */
+.admin-stats-row {
+  max-width: 1080px;
+  margin: 0 auto 36px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.admin-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-pop);
+}
+
+.admin-stat-number {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-stat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.stat-azul-n   { color: var(--azul);   }
+.stat-brass-n  { color: var(--brass);  }
+.stat-emerald-n{ color: var(--emerald);}
+.stat-coral-n  { color: var(--coral);  }
+
+/* ─── Grid de fichas ─────────────────────────────────────────── */
 .admin-grid {
   max-width: 1080px;
   margin: 0 auto;
@@ -21,23 +71,42 @@
   gap: 22px 18px;
 }
 
+.admin-ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-ficha-icono {
+  font-size: 28px;
+  margin-top: 8px;
+}
+
 .admin-ficha h4 {
   font-family: var(--font-display);
   font-size: 18px;
   color: var(--ink);
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .admin-ficha p {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--slate);
-  margin-bottom: 14px;
-  min-height: 38px;
+  margin-bottom: 10px;
+  flex: 1;
 }
 
-@media (max-width: 900px) {
-  .admin-grid { grid-template-columns: 1fr 1fr; }
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1000px) {
+  .admin-stats-row { grid-template-columns: repeat(3, 1fr); }
+  .admin-grid      { grid-template-columns: 1fr 1fr; }
 }
+
+@media (max-width: 700px) {
+  .admin-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 600px) {
   .admin-grid { grid-template-columns: 1fr; }
+  .admin-stat-number { font-size: 28px; }
 }

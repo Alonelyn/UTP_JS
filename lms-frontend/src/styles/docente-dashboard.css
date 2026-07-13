@@ -1,0 +1,165 @@
+/* ─── Shell del docente ──────────────────────────────────────── */
+.docente-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ─── Encabezado ─────────────────────────────────────────────── */
+.docente-db-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+
+.docente-db-welcome h1 {
+  font-size: clamp(26px, 4vw, 42px);
+}
+
+/* ─── Estadísticas ───────────────────────────────────────────── */
+.docente-stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.docente-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 12px;
+  border-radius: 16px;
+  border: 1.5px solid transparent;
+  text-align: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.docente-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-pop);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.stat-emerald {
+  background: var(--emerald-bg);
+  border-color: var(--emerald);
+}
+.stat-emerald .stat-number { color: var(--emerald); }
+
+.stat-azul {
+  background: var(--azul-bg);
+  border-color: var(--azul);
+}
+.stat-azul .stat-number { color: var(--azul); }
+
+.stat-brass {
+  background: var(--brass-bg);
+  border-color: var(--brass);
+}
+.stat-brass .stat-number { color: var(--brass); }
+
+.stat-ok {
+  background: rgba(47, 122, 92, 0.06);
+  border-color: var(--emerald);
+}
+.stat-ok .stat-number { color: var(--emerald); }
+
+.stat-slate {
+  background: rgba(106, 114, 130, 0.08);
+  border-color: var(--slate);
+}
+.stat-slate .stat-number { color: var(--slate); }
+
+/* ─── Sección título ─────────────────────────────────────────── */
+.docente-section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 18px;
+  letter-spacing: -0.2px;
+}
+
+/* ─── Grid de acciones ───────────────────────────────────────── */
+.docente-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.docente-action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.docente-action-icono {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.docente-action-card h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--ink);
+  margin: 0;
+}
+
+.docente-action-card p {
+  font-size: 13.5px;
+  color: var(--slate);
+  margin: 0;
+  flex: 1;
+}
+
+/* ─── Tip ────────────────────────────────────────────────────── */
+.docente-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--brass-bg);
+  border: 1px solid var(--brass);
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.docente-tip-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .docente-stats-row       { grid-template-columns: repeat(3, 1fr); }
+  .docente-actions-grid    { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .docente-stats-row       { grid-template-columns: repeat(2, 1fr); }
+  .docente-actions-grid    { grid-template-columns: 1fr; }
+  .stat-number             { font-size: 28px; }
+}

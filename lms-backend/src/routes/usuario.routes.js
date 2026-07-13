@@ -9,10 +9,15 @@ const {
   eliminarUsuario
 } = require('../controllers/usuario.controller');
 
-router.get('/', listarUsuarios);
-router.get('/:id', buscarUsuario);
+const { verificarToken, requiereRol } = require('../middleware/auth');
+
+// Rutas públicas (registro no requiere token)
 router.post('/', crearUsuario);
-router.put('/:id', actualizarUsuario);
-router.delete('/:id', eliminarUsuario);
+
+// Rutas protegidas — requieren autenticación
+router.get('/',      verificarToken, requiereRol('admin'), listarUsuarios);
+router.get('/:id',   verificarToken, buscarUsuario);
+router.put('/:id',   verificarToken, actualizarUsuario);
+router.delete('/:id',verificarToken, requiereRol('admin'), eliminarUsuario);
 
 module.exports = router;

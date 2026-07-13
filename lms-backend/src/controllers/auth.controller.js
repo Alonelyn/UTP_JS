@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario.model');
 
 const login = async (req, res) => {
@@ -18,8 +19,22 @@ const login = async (req, res) => {
       });
     }
 
+    // Generar token JWT con datos del usuario (expira en 8 horas)
+    const token = jwt.sign(
+      {
+        id:       usuario.id,
+        email:    usuario.email,
+        rol:      usuario.rol,
+        nombre:   usuario.nombre,
+        apellido: usuario.apellido
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+
     res.json({
       mensaje: 'Login exitoso',
+      token,
       usuario
     });
 
@@ -31,6 +46,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = {
-  login
-};
+module.exports = { login };

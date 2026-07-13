@@ -21,7 +21,9 @@ import Progreso from './pages/Progreso';
 import VerificarCorreo from './pages/VerificarCorreo';
 import LoaderBridge from './components/LoaderBridge';
 import EditorContenido from './pages/docente/EditorContenido';
+import DocenteDashboard from './pages/docente/DocenteDashboard';
 import Landing from './pages/Landing';
+
 
 
 function Layout() {
@@ -60,7 +62,9 @@ function Layout() {
         <Route path="/admin/inscripciones" element={<InscripcionesAdmin />} />
         <Route path="/progreso" element={<Progreso />} />
         <Route path="/verificar-correo" element={<VerificarCorreo />} />
+        <Route path="/docente" element={<DocenteDashboard />} />
         <Route path="/docente/editor-contenido" element={<EditorContenido />} />
+
         
       </Routes>
 

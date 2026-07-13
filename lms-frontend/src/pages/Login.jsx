@@ -22,11 +22,15 @@ function Login() {
 
     try {
       const response = await api.post('/auth/login', form);
-      console.log(response.data.usuario);
 
+      // Guardar token JWT y datos del usuario
+      localStorage.setItem('token',   response.data.token);
       localStorage.setItem('usuario', JSON.stringify(response.data.usuario));
 
-      navigate('/dashboard');
+      const rol = response.data.usuario?.rol;
+      if (rol === 'admin')       navigate('/admin');
+      else if (rol === 'instructor') navigate('/docente');
+      else                           navigate('/dashboard');
 
     } catch (error) {
       alert(error.response?.data?.mensaje || 'Error al iniciar sesión');

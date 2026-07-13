@@ -6,7 +6,12 @@ const {
   obtenerProgresoCurso
 } = require('../controllers/progreso.controller');
 
-router.post('/', marcarLeccionCompletada);
-router.get('/:usuarioId/:cursoId', obtenerProgresoCurso);
+const { verificarToken } = require('../middleware/auth');
+
+// Leer progreso — requiere autenticación
+router.get('/:usuarioId/:cursoId', verificarToken, obtenerProgresoCurso);
+
+// Marcar completada — requiere autenticación (validación principal anti-fraude)
+router.post('/', verificarToken, marcarLeccionCompletada);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const Progreso = require('../models/progreso.model');
 
 const marcarLeccionCompletada = async (req, res) => {
   try {
-    const { usuario_id, leccion_id } = req.body;
+    const { usuario_id, leccion_id, tiempo_activo } = req.body;
 
     if (!usuario_id || !leccion_id) {
       return res.status(400).json({
@@ -10,9 +10,25 @@ const marcarLeccionCompletada = async (req, res) => {
       });
     }
 
+    // Validar tiempo mínimo contra lo almacenado en la lección
+    const duracionMinima = await Progreso.obtenerDuracionMinima(leccion_id);
+
+    if (duracionMinima !== null && duracionMinima > 0) {
+      const tiempoEnviado = parseInt(tiempo_activo) || 0;
+      if (tiempoEnviado < duracionMinima) {
+        return res.status(400).json({
+          mensaje: 'Tiempo insuficiente para completar la lección',
+          tiempo_activo: tiempoEnviado,
+          duracion_minima: duracionMinima,
+          faltante: duracionMinima - tiempoEnviado
+        });
+      }
+    }
+
     const progreso = await Progreso.marcarCompletada({
       usuario_id,
-      leccion_id
+      leccion_id,
+      tiempo_activo: parseInt(tiempo_activo) || 0
     });
 
     res.status(201).json(progreso);

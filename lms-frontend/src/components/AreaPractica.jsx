@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import api from '../api/axios';
 
-function AreaPractica({ leccion }) {
+function AreaPractica({ leccion, onEjecutado }) {
   const obtenerCodigoInicial = () => {
     const titulo = leccion?.titulo?.toLowerCase() || '';
     const contenido = leccion?.contenido_texto?.toLowerCase() || '';
@@ -212,10 +211,43 @@ console.log(calcularDoble(5));`;
       const funcion = new Function('console', codigo);
       funcion(consoleSimulado);
 
-      setSalida(logs.join('\n') || 'El código se ejecutó sin salida.');
+      const salidaResultado = logs.join('\n') || 'El código se ejecutó sin salida.';
+      setSalida(salidaResultado);
+
+      // Notificar al padre que el alumno ejecutó la práctica al menos una vez
+      if (onEjecutado) onEjecutado();
+
     } catch (error) {
       setSalida(`Error: ${error.message}`);
     }
+  };
+
+  const renderizarFeedback = (texto = '') => {
+    if (!texto) return null;
+
+    const lineas = texto
+      .replaceAll('<br>', '\n')
+      .replaceAll('<br/>', '\n')
+      .replaceAll('<br />', '\n')
+      .replaceAll('<strong>', '**')
+      .replaceAll('</strong>', '**')
+      .split('\n');
+
+    return lineas.map((linea, index) => {
+      const partes = linea.split('**');
+
+      return (
+        <div key={index} className="mb-1">
+          {partes.map((parte, parteIndex) =>
+            parteIndex % 2 === 0 ? (
+              <span key={`${index}-${parteIndex}`}>{parte}</span>
+            ) : (
+              <strong key={`${index}-${parteIndex}`}>{parte}</strong>
+            )
+          )}
+        </div>
+      );
+    });
   };
 
   const revisarConIA = async () => {
@@ -311,14 +343,7 @@ console.log(calcularDoble(5));`;
           <strong>Feedback de UTP-BOOT:</strong>
 
           <div className="mt-2">
-            <ReactMarkdown>
-              {feedback
-                .replaceAll('<br>', '\n')
-                .replaceAll('<br/>', '\n')
-                .replaceAll('<br />', '\n')
-                .replaceAll('<strong>', '**')
-                .replaceAll('</strong>', '**')}
-            </ReactMarkdown>
+            {renderizarFeedback(feedback)}
           </div>
         </div>
       )}
