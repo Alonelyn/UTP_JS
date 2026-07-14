@@ -9,10 +9,15 @@ const {
   eliminarLeccion
 } = require('../controllers/leccion.controller');
 
-router.get('/', listarLecciones);
+const { verificarToken, requiereRol } = require('../middleware/auth');
+
+// Lectura pública (alumnos acceden sin token para ver el catálogo)
+router.get('/',    listarLecciones);
 router.get('/:id', buscarLeccion);
-router.post('/', crearLeccion);
-router.put('/:id', actualizarLeccion);
-router.delete('/:id', eliminarLeccion);
+
+// Escritura — solo instructores o administradores
+router.post('/',      verificarToken, requiereRol('instructor', 'admin'), crearLeccion);
+router.put('/:id',    verificarToken, requiereRol('instructor', 'admin'), actualizarLeccion);
+router.delete('/:id', verificarToken, requiereRol('instructor', 'admin'), eliminarLeccion);
 
 module.exports = router;

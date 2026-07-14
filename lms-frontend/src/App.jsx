@@ -23,6 +23,7 @@ import LoaderBridge from './components/LoaderBridge';
 import EditorContenido from './pages/docente/EditorContenido';
 import DocenteDashboard from './pages/docente/DocenteDashboard';
 import Landing from './pages/Landing';
+import RecuperarPassword from './pages/RecuperarPassword';
 
 
 
@@ -64,6 +65,7 @@ function Layout() {
         <Route path="/verificar-correo" element={<VerificarCorreo />} />
         <Route path="/docente" element={<DocenteDashboard />} />
         <Route path="/docente/editor-contenido" element={<EditorContenido />} />
+        <Route path="/recuperar-password" element={<RecuperarPassword />} />
 
         
       </Routes>

@@ -29,11 +29,11 @@ function Usuarios() {
 
   const cargarUsuarioParaEditar = (usuario) => {
     setForm({
-      nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      email: usuario.email,
-      password_hash: usuario.password_hash,
-      rol: usuario.rol
+      nombre:        usuario.nombre,
+      apellido:      usuario.apellido,
+      email:         usuario.email,
+      password_hash: '',        // siempre vacío — nunca mostrar el hash
+      rol:           usuario.rol
     });
 
     setUsuarioEditando(usuario.id);
@@ -42,18 +42,22 @@ function Usuarios() {
   const actualizarUsuario = async (e) => {
     e.preventDefault();
 
-    await api.put(`/usuarios/${usuarioEditando}`, form);
+    // Solo enviar password_hash si el admin escribió una nueva contraseña
+    const payload = {
+      nombre:   form.nombre,
+      apellido: form.apellido,
+      email:    form.email,
+      rol:      form.rol
+    };
+
+    if (form.password_hash.trim()) {
+      payload.password_hash = form.password_hash;
+    }
+
+    await api.put(`/usuarios/${usuarioEditando}`, payload);
 
     setUsuarioEditando(null);
-
-    setForm({
-      nombre: '',
-      apellido: '',
-      email: '',
-      password_hash: '',
-      rol: 'estudiante'
-    });
-
+    setForm({ nombre: '', apellido: '', email: '', password_hash: '', rol: 'estudiante' });
     listarUsuarios();
   };
 
@@ -178,7 +182,7 @@ function Usuarios() {
 
             <input
               className="form-control mb-2"
-              placeholder="Contraseña"
+              placeholder={usuarioEditando ? 'Nueva contraseña (dejar vacío para no cambiar)' : 'Contraseña'}
               type="password"
               value={form.password_hash}
               onChange={(e) => setForm({ ...form, password_hash: e.target.value })}

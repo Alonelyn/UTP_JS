@@ -9,10 +9,15 @@ const {
   eliminarModulo
 } = require('../controllers/modulo.controller');
 
-router.get('/', listarModulos);
+const { verificarToken, requiereRol } = require('../middleware/auth');
+
+// Lectura pública
+router.get('/',    listarModulos);
 router.get('/:id', buscarModulo);
-router.post('/', crearModulo);
-router.put('/:id', actualizarModulo);
-router.delete('/:id', eliminarModulo);
+
+// Escritura — solo instructores o administradores
+router.post('/',      verificarToken, requiereRol('instructor', 'admin'), crearModulo);
+router.put('/:id',    verificarToken, requiereRol('instructor', 'admin'), actualizarModulo);
+router.delete('/:id', verificarToken, requiereRol('instructor', 'admin'), eliminarModulo);
 
 module.exports = router;

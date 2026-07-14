@@ -53,19 +53,28 @@ const crear = async (usuario) => {
   return result.rows[0];
 };
 
-const actualizar = async (id, usuario) => {
-  const { nombre, apellido, email, password_hash, rol } = usuario;
+const actualizar = async (id, datos) => {
+  const campos  = [];
+  const valores = [];
+  let   idx     = 1;
+
+  if (datos.nombre    !== undefined) { campos.push(`nombre = $${idx++}`);    valores.push(datos.nombre); }
+  if (datos.apellido  !== undefined) { campos.push(`apellido = $${idx++}`);  valores.push(datos.apellido); }
+  if (datos.email     !== undefined) { campos.push(`email = $${idx++}`);     valores.push(datos.email); }
+  if (datos.rol       !== undefined) { campos.push(`rol = $${idx++}`);       valores.push(datos.rol); }
+  // password_hash solo se actualiza si viene explícitamente en el payload
+  if (datos.password_hash !== undefined && datos.password_hash !== '') {
+    campos.push(`password_hash = $${idx++}`);
+    valores.push(datos.password_hash);
+  }
+
+  if (campos.length === 0) return null;
+
+  valores.push(id); // último parámetro = WHERE id
 
   const result = await pool.query(
-    `UPDATE "Usuario"
-    SET nombre = $1,
-        apellido = $2,
-        email = $3,
-        password_hash = $4,
-        rol = $5
-    WHERE id = $6
-    RETURNING *`,
-    [nombre, apellido, email, password_hash, rol, id]
+    `UPDATE "Usuario" SET ${campos.join(', ')} WHERE id = $${idx} RETURNING *`,
+    valores
   );
 
   return result.rows[0];
@@ -92,6 +101,18 @@ const verificarEmail = async (usuario_id) => {
   return result.rows[0];
 }
 
+const actualizarPassword = async (id, nuevo_hash) => {
+  const result = await pool.query(
+    `UPDATE "Usuario"
+     SET password_hash = $1
+     WHERE id = $2
+     RETURNING id, email`,
+    [nuevo_hash, id]
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   obtenerUsuarios,
   buscarPorId,
@@ -99,6 +120,7 @@ module.exports = {
   buscarPorEmail,
   crear,
   actualizar,
+  actualizarPassword,
   eliminar,
   verificarEmail
 };

@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario.model');
 const { enviarCodigo } = require('./verificacion.controller')
 
@@ -58,8 +59,13 @@ const crearUsuario = async (req, res) => {
       });
     }
 
+    // Hashear la contraseña ANTES de guardar en la BD
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(password_hash, saltRounds);
+
     const usuario = await Usuario.crear({
       ...req.body,
+      password_hash:    hashedPassword,
       email_verificado: false
     });
 
@@ -85,22 +91,33 @@ const crearUsuario = async (req, res) => {
 
 const actualizarUsuario = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password_hash } = req.body;
 
     if (email && !correoValido.test(email)) {
       return res.status(400).json({
-        mensaje:
-          'Correo inválido. Solo se permiten gmail.com, hotmail.com, outlook.com y utp.edu.pe'
+        mensaje: 'Correo inválido. Solo se permiten gmail.com, hotmail.com, outlook.com y utp.edu.pe'
       });
     }
 
-    const usuario = await Usuario.actualizar(req.params.id, req.body);
+    const datos = { ...req.body };
+
+    // Si viene nueva contraseña, hashearla antes de guardar
+    if (password_hash && password_hash.trim()) {
+      datos.password_hash = await bcrypt.hash(password_hash, 12);
+    } else {
+      // Si no viene contraseña, eliminar el campo para no tocar el hash existente
+      delete datos.password_hash;
+    }
+
+    const usuario = await Usuario.actualizar(req.params.id, datos);
 
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
-    res.json(usuario);
+    // Nunca devolver el hash al cliente
+    const { password_hash: _, ...usuarioSeguro } = usuario;
+    res.json(usuarioSeguro);
 
   } catch (error) {
     if (error.code === '23505') {

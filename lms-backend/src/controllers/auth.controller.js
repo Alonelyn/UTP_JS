@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken');
+const jwt    = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario.model');
 
 const login = async (req, res) => {
@@ -11,9 +12,18 @@ const login = async (req, res) => {
       });
     }
 
-    const usuario = await Usuario.buscarPorEmailPassword(email, password_hash);
+    const usuario = await Usuario.buscarPorEmail(email);
 
     if (!usuario) {
+      return res.status(401).json({
+        mensaje: 'Credenciales incorrectas'
+      });
+    }
+
+    // Comparar contraseña con el hash almacenado
+    const passwordValida = await bcrypt.compare(password_hash, usuario.password_hash);
+
+    if (!passwordValida) {
       return res.status(401).json({
         mensaje: 'Credenciales incorrectas'
       });
@@ -32,10 +42,13 @@ const login = async (req, res) => {
       { expiresIn: '8h' }
     );
 
+    // Nunca exponer el hash al cliente
+    const { password_hash: _, ...usuarioSeguro } = usuario;
+
     res.json({
       mensaje: 'Login exitoso',
       token,
-      usuario
+      usuario: usuarioSeguro
     });
 
   } catch (error) {

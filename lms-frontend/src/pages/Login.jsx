@@ -69,6 +69,9 @@ function Login() {
           <p className="auth-footnote">
             ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
           </p>
+          <p className="auth-footnote">
+            ¿Olvidaste tu contraseña? <Link to="/recuperar-password">Recupérala aquí</Link>
+          </p>
         </div>
       </div>
     </div>

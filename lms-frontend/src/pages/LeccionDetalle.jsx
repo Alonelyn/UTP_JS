@@ -94,22 +94,19 @@ function LeccionDetalle() {
     return () => clearInterval(intervalRef.current);
   }, [timerActivo, completada]);
 
-  // ── Pausar al cambiar de pestaña ──────────────────────────
+  // ── Pausar solo cuando el TAB se oculta (no cuando el iframe toma foco) ──
   useEffect(() => {
     const handleVisibility = () => {
-      setTimerActivo(document.visibilityState === 'visible');
+      // document.hidden = true  → alumno cambió de pestaña o minimizó
+      // document.hidden = false → volvió al tab con la lección
+      // NO se dispara al hacer clic dentro del iframe de YouTube ✅
+      setTimerActivo(!document.hidden);
     };
-    const handleBlur  = () => setTimerActivo(false);
-    const handleFocus = () => setTimerActivo(true);
 
     document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('blur',  handleBlur);
-    window.addEventListener('focus', handleFocus);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('blur',  handleBlur);
-      window.removeEventListener('focus', handleFocus);
     };
   }, []);
 
@@ -264,7 +261,7 @@ function LeccionDetalle() {
               ? '⏸ Vuelve a esta pestaña para continuar'
               : tiempoSuficiente
                 ? '✅ Ya puedes completar la lección'
-                : '📖 Revisando contenido...'}
+                : '📋 Revisando lección...'}
           </span>
         </div>
       )}
