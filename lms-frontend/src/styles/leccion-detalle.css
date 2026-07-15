@@ -1,10 +1,13 @@
+/* ─── Layout base ────────────────────────────────────────────── */
 .lesson-hero {
   margin-bottom: 20px;
 }
 
 .lesson-hero h1 {
-  font-size: clamp(32px, 5vw, 56px);
+  font-size: clamp(28px, 5vw, 52px);
   margin-bottom: 14px;
+  font-family: var(--font-display);
+  color: var(--ink);
 }
 
 .lesson-main-grid {
@@ -14,6 +17,7 @@
   align-items: start;
 }
 
+/* ─── Video ──────────────────────────────────────────────────── */
 .lesson-video-frame {
   position: relative;
   width: 100%;
@@ -46,11 +50,159 @@
   padding: 24px;
 }
 
+/* ─── Imagen de portada ──────────────────────────────────────── */
+.lesson-cover-img {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.lesson-cover-img img {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Sidebar ────────────────────────────────────────────────── */
 .lesson-side-card {
   position: sticky;
   top: 90px;
 }
 
+/* Indicador de timer en el sidebar */
+.timer-side-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--paper-deep);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--slate);
+  font-family: var(--font-mono);
+}
+
+.timer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-active {
+  background: var(--emerald);
+  box-shadow: 0 0 0 3px rgba(47, 122, 92, 0.25);
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+.dot-paused {
+  background: var(--slate);
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(47, 122, 92, 0.25); }
+  50%       { box-shadow: 0 0 0 6px rgba(47, 122, 92, 0.08); }
+}
+
+/* ── Indicador de lectura (barra sutil) ─────────────────────── */
+.lesson-reading-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  transition: background 0.4s, border-color 0.4s;
+  border: 1px solid transparent;
+}
+
+.reading-active {
+  background: rgba(44, 74, 124, 0.05);
+  border-color: rgba(44, 74, 124, 0.15);
+}
+
+.reading-paused {
+  background: rgba(106, 114, 130, 0.06);
+  border-color: rgba(106, 114, 130, 0.2);
+}
+
+.reading-done {
+  background: rgba(47, 122, 92, 0.06);
+  border-color: rgba(47, 122, 92, 0.2);
+}
+
+.reading-bar-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.reading-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--azul), var(--emerald));
+  transition: width 1.2s ease;
+}
+
+.reading-bar-label {
+  font-size: 12.5px;
+  color: var(--slate);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* ── Indicador lateral (punto vivo) ────────────────────────── */
+.reading-side-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 8px 12px;
+  background: var(--paper-deep);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--slate);
+  font-family: var(--font-mono);
+}
+
+/* ── Bloque de completar ──────────────────────────────────── */
+.lesson-complete-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lesson-timer-error {
+  font-size: 13px;
+  color: var(--coral);
+  background: var(--coral-bg);
+  border: 1px solid var(--coral);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* Botón bloqueado: texto neutro, sin referencias a tiempo */
+.lesson-btn-locked {
+  opacity: 0.55;
+  cursor: default !important;
+  pointer-events: none;
+}
+
+/* Botón desbloqueado: animación suave de aparición */
+.lesson-btn-ready {
+  animation: btn-unlock 0.5s ease;
+}
+
+@keyframes btn-unlock {
+  from { transform: scale(0.96); opacity: 0.6; }
+  to   { transform: scale(1);    opacity: 1;   }
+}
+
+/* ─── Contenido / navegación ─────────────────────────────────── */
 .lesson-content {
   white-space: pre-wrap;
   line-height: 1.8;
@@ -65,6 +217,19 @@
   align-items: center;
 }
 
+/* ─── Aviso de práctica obligatoria ─────────────────────────── */
+.practice-required-notice {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(185, 132, 42, 0.10);
+  border: 1px solid var(--brass);
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: var(--brass);
+  font-weight: 500;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 992px) {
   .lesson-main-grid {
     grid-template-columns: 1fr;
@@ -73,4 +238,35 @@
   .lesson-side-card {
     position: static;
   }
+
+  .timer-display {
+    font-size: 16px;
+  }
+}
+
+.lesson-page {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.lesson-page .card .reading-side-indicator {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.lesson-content,
+.lesson-side-card,
+.lesson-video-card,
+.lesson-resource-box{
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+.lesson-side-card p,
+.lesson-side-card small,
+.lesson-content,
+.lesson-video-card p,
+.lesson-resource-box p {
+  color: var(--text) !important;
 }

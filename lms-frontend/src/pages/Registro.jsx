@@ -38,14 +38,13 @@ function Registro() {
       }
 
     try {
-      const response = await api.post('/usuarios', {
+      await api.post('/usuarios', {
         ...form,
         rol: 'estudiante'
       });
 
-      localStorage.setItem('usuario', JSON.stringify(response.data));
-
-      alert('Registro exitoso');
+      // No guardamos token aquí: el usuario debe verificar su correo
+      // y luego iniciar sesión para obtener el JWT
       navigate('/verificar-correo');
 
     } catch (error) {

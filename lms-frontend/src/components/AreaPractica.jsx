@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import api from '../api/axios';
 
-function AreaPractica({ leccion }) {
+function AreaPractica({ leccion, onPracticaValidada }) {
+
+  const [codigoInicial, setCodigoInicial] = useState('');
+  const [codigoModificado, setCodigoModificado] = useState(false);
+  const [ejecucionCorrecta, setEjecucionCorrecta] = useState(false);
+
+
   const obtenerCodigoInicial = () => {
     const titulo = leccion?.titulo?.toLowerCase() || '';
     const contenido = leccion?.contenido_texto?.toLowerCase() || '';
@@ -14,9 +19,9 @@ function AreaPractica({ leccion }) {
     ) {
       return `const datos = [2, 4, 6, 8, 10];
 
-const promedio = datos.reduce((acumulado, valor) => acumulado + valor, 0) / datos.length;
+      const promedio = datos.reduce((acumulado, valor) => acumulado + valor, 0) / datos.length;
 
-console.log("Promedio del conjunto de datos:", promedio);`;
+      console.log("Promedio del conjunto de datos:", promedio);`;
     }
 
     if (
@@ -26,11 +31,11 @@ console.log("Promedio del conjunto de datos:", promedio);`;
     ) {
       return `const tipoAprendizaje = "supervisado";
 
-if (tipoAprendizaje === "supervisado") {
-  console.log("El modelo aprende usando datos con respuestas conocidas.");
-} else {
-  console.log("El modelo busca patrones sin respuestas previas.");
-}`;
+      if (tipoAprendizaje === "supervisado") {
+        console.log("El modelo aprende usando datos con respuestas conocidas.");
+      } else {
+        console.log("El modelo busca patrones sin respuestas previas.");
+      }`;
     }
 
     if (
@@ -38,12 +43,12 @@ if (tipoAprendizaje === "supervisado") {
       contenido.includes('entrenar')
     ) {
       return `const epocas = 5;
-let precision = 50;
+      let precision = 50;
 
-for (let i = 1; i <= epocas; i++) {
-  precision += 8;
-  console.log("Época", i, "- precisión:", precision + "%");
-}`;
+      for (let i = 1; i <= epocas; i++) {
+        precision += 8;
+        console.log("Época", i, "- precisión:", precision + "%");
+      }`;
     }
 
     if (
@@ -52,11 +57,11 @@ for (let i = 1; i <= epocas; i++) {
       contenido.includes('exactitud')
     ) {
       return `const prediccionesCorrectas = 8;
-const totalPredicciones = 10;
+        const totalPredicciones = 10;
 
-const exactitud = (prediccionesCorrectas / totalPredicciones) * 100;
+        const exactitud = (prediccionesCorrectas / totalPredicciones) * 100;
 
-console.log("Exactitud del modelo:", exactitud + "%");`;
+        console.log("Exactitud del modelo:", exactitud + "%");`;
     }
 
     if (
@@ -65,9 +70,9 @@ console.log("Exactitud del modelo:", exactitud + "%");`;
     ) {
       return `console.log("Servidor Node.js iniciado correctamente");
 
-const puerto = 3000;
+      const puerto = 3000;
 
-console.log("Escuchando en el puerto:", puerto);`;
+      console.log("Escuchando en el puerto:", puerto);`;
     }
 
     if (
@@ -196,10 +201,26 @@ console.log(calcularDoble(5));`;
   const [revisando, setRevisando] = useState(false);
 
   useEffect(() => {
-    setCodigo(obtenerCodigoInicial());
+    const inicial = obtenerCodigoInicial();
+
+    setCodigoInicial(inicial);
+    setCodigo(inicial);
+    setCodigoModificado(false);
+    setEjecucionCorrecta(false);
     setSalida('');
     setFeedback('');
+
+    if (onPracticaValidada) {
+      onPracticaValidada(false);
+    }
   }, [leccion?.id]);
+
+  // Verificar si realmente cambió el código
+  const normalizarCodigo = (texto = '') => {
+    return texto
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
 
   const ejecutarCodigo = () => {
     const logs = [];
@@ -208,14 +229,74 @@ console.log(calcularDoble(5));`;
       log: (...args) => logs.push(args.join(' '))
     };
 
+    const fueModificado =
+      normalizarCodigo(codigo) !== normalizarCodigo(codigoInicial);
+
+    if (!fueModificado) {
+      setSalida(
+        'Debes modificar el código inicial antes de ejecutar la práctica.'
+      );
+
+      setCodigoModificado(false);
+      setEjecucionCorrecta(false);
+
+      if (onPracticaValidada) {
+        onPracticaValidada(false);
+      }
+
+      return;
+    }
+
     try {
       const funcion = new Function('console', codigo);
       funcion(consoleSimulado);
 
-      setSalida(logs.join('\n') || 'El código se ejecutó sin salida.');
+      const salidaResultado =
+        logs.join('\n') || 'El código se ejecutó sin salida.';
+
+      setSalida(salidaResultado);
+      setCodigoModificado(true);
+      setEjecucionCorrecta(true);
+
+      if (onPracticaValidada) {
+        onPracticaValidada(true);
+      }
     } catch (error) {
       setSalida(`Error: ${error.message}`);
+      setEjecucionCorrecta(false);
+
+      if (onPracticaValidada) {
+        onPracticaValidada(false);
+      }
     }
+  };
+
+  const renderizarFeedback = (texto = '') => {
+    if (!texto) return null;
+
+    const lineas = texto
+      .replaceAll('<br>', '\n')
+      .replaceAll('<br/>', '\n')
+      .replaceAll('<br />', '\n')
+      .replaceAll('<strong>', '**')
+      .replaceAll('</strong>', '**')
+      .split('\n');
+
+    return lineas.map((linea, index) => {
+      const partes = linea.split('**');
+
+      return (
+        <div key={index} className="mb-1">
+          {partes.map((parte, parteIndex) =>
+            parteIndex % 2 === 0 ? (
+              <span key={`${index}-${parteIndex}`}>{parte}</span>
+            ) : (
+              <strong key={`${index}-${parteIndex}`}>{parte}</strong>
+            )
+          )}
+        </div>
+      );
+    });
   };
 
   const revisarConIA = async () => {
@@ -272,7 +353,22 @@ console.log(calcularDoble(5));`;
         className="form-control mb-3"
         rows="10"
         value={codigo}
-        onChange={(e) => setCodigo(e.target.value)}
+        // Evitamos que valide solo con espacios o saltos de línea, y que considere cambios reales en el código
+        onChange={(e) => {
+          const nuevoCodigo = e.target.value;
+
+          setCodigo(nuevoCodigo);
+
+          const fueModificado =
+            normalizarCodigo(nuevoCodigo) !== normalizarCodigo(codigoInicial);
+
+          setCodigoModificado(fueModificado);
+          setEjecucionCorrecta(false);
+
+          if (onPracticaValidada) {
+            onPracticaValidada(false);
+          }
+        }}
         style={{ fontFamily: 'Consolas, monospace' }}
       />
 
@@ -292,13 +388,48 @@ console.log(calcularDoble(5));`;
         <button
           className="btn btn-outline-secondary"
           onClick={() => {
-            setCodigo(obtenerCodigoInicial());
+            const inicial = obtenerCodigoInicial();
+
+            setCodigoInicial(inicial);
+            setCodigo(inicial);
+            setCodigoModificado(false);
+            setEjecucionCorrecta(false);
             setSalida('');
             setFeedback('');
+
+            if (onPracticaValidada) {
+              onPracticaValidada(false);
+            }
           }}
         >
           Reiniciar práctica
         </button>
+      </div>
+
+      <div
+        className={`alert ${
+          codigoModificado && ejecucionCorrecta
+            ? 'alert-success'
+            : 'alert-warning'
+        }`}
+      >
+        {!codigoModificado && (
+          <span>
+            Modifica el código inicial antes de ejecutar la práctica.
+          </span>
+        )}
+
+        {codigoModificado && !ejecucionCorrecta && (
+          <span>
+            Código modificado. Ahora ejecútalo correctamente.
+          </span>
+        )}
+
+        {codigoModificado && ejecucionCorrecta && (
+          <span>
+            Práctica modificada y ejecutada correctamente.
+          </span>
+        )}
       </div>
 
       <div className="border rounded p-3 mb-3">
@@ -311,14 +442,7 @@ console.log(calcularDoble(5));`;
           <strong>Feedback de UTP-BOOT:</strong>
 
           <div className="mt-2">
-            <ReactMarkdown>
-              {feedback
-                .replaceAll('<br>', '\n')
-                .replaceAll('<br/>', '\n')
-                .replaceAll('<br />', '\n')
-                .replaceAll('<strong>', '**')
-                .replaceAll('</strong>', '**')}
-            </ReactMarkdown>
+            {renderizarFeedback(feedback)}
           </div>
         </div>
       )}

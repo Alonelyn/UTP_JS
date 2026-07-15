@@ -11,11 +11,11 @@ const buscarPorId = async (id) => {
 };
 
 const crear = async (leccion) => {
-  const { modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados } = leccion;
+  const { modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados, duracion_minima } = leccion;
 
   const result = await pool.query(
-    'INSERT INTO "Leccion" (modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados]
+    'INSERT INTO "Leccion" (modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados, duracion_minima) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+    [modulo_id, titulo, tipo, orden, contenido_texto, puntos_otorgados, duracion_minima || 60]
   );
 
   return result.rows[0];
@@ -30,7 +30,11 @@ const actualizar = async (id, leccion) => {
     contenido_texto,
     puntos_otorgados,
     video_url,
-    xp_otorgada
+    xp_otorgada,
+    duracion_minima,
+    reto_practico,
+    dificultad,
+    imagen_url
   } = leccion;
 
   const result = await pool.query(
@@ -43,8 +47,12 @@ const actualizar = async (id, leccion) => {
         contenido_texto = $5,
         puntos_otorgados = $6,
         video_url = $7,
-        xp_otorgada = $8
-     WHERE id = $9
+        xp_otorgada = $8,
+        duracion_minima = $9,
+        reto_practico = $10,
+        dificultad = $11,
+        imagen_url = $12
+     WHERE id = $13
      RETURNING *`,
     [
       modulo_id,
@@ -55,6 +63,10 @@ const actualizar = async (id, leccion) => {
       puntos_otorgados,
       video_url,
       xp_otorgada,
+      duracion_minima,
+      reto_practico,
+      dificultad,
+      imagen_url,
       id
     ]
   );

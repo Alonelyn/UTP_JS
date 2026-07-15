@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import '../../styles/cursos-docente.css';
 
 function CursosDocente() {
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario  = JSON.parse(localStorage.getItem('usuario'));
+  const navigate = useNavigate();
 
-  const [cursos, setCursos] = useState([]);
+  const [cursos,   setCursos]   = useState([]);
+  const [modulos,  setModulos]  = useState([]);
+  const [lecciones, setLecciones] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
   const [form, setForm] = useState({
     titulo: '',
@@ -16,13 +21,25 @@ function CursosDocente() {
     estado: 'borrador'
   });
 
-  const listarCursos = async () => {
-    const response = await api.get('/cursos');
-    const misCursos = response.data.filter(
-      (curso) => curso.instructor_id === usuario.id
-    );
+  const listarDatos = async () => {
+    setCargando(true);
+    try {
+      const [cursosRes, modulosRes, leccionesRes] = await Promise.all([
+        api.get('/cursos'),
+        api.get('/modulos'),
+        api.get('/lecciones')
+      ]);
 
-    setCursos(misCursos);
+      const misCursos = cursosRes.data.filter(
+        (c) => c.instructor_id === usuario?.id
+      );
+
+      setCursos(misCursos);
+      setModulos(modulosRes.data);
+      setLecciones(leccionesRes.data);
+    } finally {
+      setCargando(false);
+    }
   };
 
   const crearCurso = async (e) => {
@@ -47,24 +64,42 @@ function CursosDocente() {
       estado: 'borrador'
     });
 
-    listarCursos();
+    listarDatos();
   };
 
-  useEffect(() => {
-    listarCursos();
-  }, []);
+  useEffect(() => { listarDatos(); }, []);
+
+  const modulosDeCurso  = (cursoId) => modulos.filter((m) => m.curso_id === cursoId);
+  const leccionesDeCurso = (cursoId) => {
+    const ids = modulosDeCurso(cursoId).map((m) => m.id);
+    return lecciones.filter((l) => ids.includes(l.modulo_id));
+  };
+
+  const accentEstado = { publicado: 'emerald', borrador: 'brass', archivado: 'coral' };
 
   return (
     <div className="page-shell" data-ai-context="true">
+
       <div className="docente-head">
-        <p className="eyebrow" style={{ '--accent': 'var(--emerald)' }}>Panel docente</p>
-        <h1 className="page-title">Gestión de cursos del docente</h1>
-        <p className="page-sub">Docente: {usuario.nombre} {usuario.apellido}</p>
+        <div>
+          <p className="eyebrow" style={{ '--accent': 'var(--emerald)' }}>
+            Panel docente
+          </p>
+          <h1 className="page-title">Gestión de mis cursos</h1>
+          <p className="page-sub">
+            {usuario.nombre} {usuario.apellido} — {cursos.length} curso(s) registrado(s)
+          </p>
+        </div>
+        <Link to="/docente" className="btn btn-secondary">
+          ← Volver al dashboard
+        </Link>
       </div>
 
       <div className="docente-wrap">
+
+        {/* ── Formulario para crear curso ─────────────────── */}
         <div className="docente-form">
-          <div className="docente-form-head">Crear curso</div>
+          <div className="docente-form-head">+ Crear nuevo curso</div>
           <form onSubmit={crearCurso} className="docente-form-body">
             <input
               className="form-control mb-2"
@@ -75,14 +110,15 @@ function CursosDocente() {
 
             <input
               className="form-control mb-2"
-              placeholder="Slug del curso"
+              placeholder="Slug (ej: javascript-basico)"
               value={form.slug}
               onChange={(e) => setForm({ ...form, slug: e.target.value })}
             />
 
             <textarea
               className="form-control mb-2"
-              placeholder="Descripción"
+              placeholder="Descripción breve del curso"
+              rows="3"
               value={form.descripcion}
               onChange={(e) => setForm({ ...form, descripcion: e.target.value })}
             />
@@ -90,7 +126,7 @@ function CursosDocente() {
             <input
               className="form-control mb-2"
               type="number"
-              placeholder="Precio"
+              placeholder="Precio (S/)"
               value={form.precio}
               onChange={(e) => setForm({ ...form, precio: e.target.value })}
             />
@@ -121,25 +157,62 @@ function CursosDocente() {
           </form>
         </div>
 
+        {/* ── Lista de cursos ─────────────────────────────── */}
         <h2 className="docente-lista-titulo">Mis cursos</h2>
 
-        {cursos.length === 0 && (
+        {cargando && <p className="docente-vacio">Cargando cursos…</p>}
+
+        {!cargando && cursos.length === 0 && (
           <p className="docente-vacio">Todavía no has creado cursos.</p>
         )}
 
-        {cursos.map((curso) => (
-          <div
-            key={curso.id}
-            className="ficha docente-curso-ficha"
-            style={{ '--accent': 'var(--emerald)' }}
-          >
-            <h4>{curso.titulo}</h4>
-            <p>{curso.descripcion}</p>
-            <span className="sello sello-brass">{curso.nivel}</span>{' '}
-            <span className="sello sello-emerald">{curso.estado}</span>{' '}
-            <span className="sello sello-azul">S/ {curso.precio}</span>
-          </div>
-        ))}
+        <div className="docente-cursos-grid">
+          {cursos.map((curso) => {
+            const numModulos   = modulosDeCurso(curso.id).length;
+            const numLecciones = leccionesDeCurso(curso.id).length;
+            const acc = accentEstado[curso.estado] || 'brass';
+
+            return (
+              <div
+                key={curso.id}
+                className="ficha docente-curso-ficha"
+                style={{ '--accent': `var(--${acc})` }}
+              >
+                <span className="ficha-tab">{curso.nivel}</span>
+
+                <h4>{curso.titulo}</h4>
+                <p className="docente-curso-desc">
+                  {curso.descripcion || 'Sin descripción aún.'}
+                </p>
+
+                {/* Estadísticas del curso */}
+                <div className="docente-curso-stats">
+                  <span className="sello sello-azul">📘 {numModulos} tema(s)</span>
+                  <span className="sello sello-emerald">📄 {numLecciones} lección(es)</span>
+                  <span className={`sello sello-${acc}`}>{curso.estado}</span>
+                  <span className="sello sello-brass">S/ {curso.precio}</span>
+                </div>
+
+                {/* Acciones */}
+                <div className="docente-curso-actions">
+                  <Link
+                    className="btn btn-primary btn-sm"
+                    to="/docente/editor-contenido"
+                    state={{ cursoId: curso.id }}
+                  >
+                    ✏️ Editar contenido
+                  </Link>
+                  <Link
+                    className="btn btn-secondary btn-sm"
+                    to={`/cursos/${curso.slug}`}
+                  >
+                    👁 Vista alumno
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

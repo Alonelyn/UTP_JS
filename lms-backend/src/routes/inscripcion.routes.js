@@ -9,10 +9,13 @@ const {
   eliminarInscripcion
 } = require('../controllers/inscripcion.controller');
 
-router.get('/', listarInscripciones);
-router.get('/:id', buscarInscripcion);
-router.post('/', crearInscripcion);
-router.put('/:id', actualizarInscripcion);
-router.delete('/:id', eliminarInscripcion);
+const { verificarToken, requiereRol } = require('../middleware/auth');
+
+// Todas las operaciones de inscripción requieren autenticación
+router.get('/',       verificarToken, listarInscripciones);
+router.get('/:id',    verificarToken, buscarInscripcion);
+router.post('/',      verificarToken, crearInscripcion);
+router.put('/:id',    verificarToken, requiereRol('admin'), actualizarInscripcion);
+router.delete('/:id', verificarToken, requiereRol('admin'), eliminarInscripcion);
 
 module.exports = router;

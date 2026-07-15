@@ -126,3 +126,125 @@
     position: static;
   }
 }
+
+/* ── Cabecera del editor ──────────────────────────────────────── */
+.editor-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.gestion-head {
+  max-width: 1280px;
+  margin: 0 auto 24px;
+}
+
+/* ── Cabecera de la lección editando ──────────────────────────── */
+.editor-leccion-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.editor-saved-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--emerald-bg);
+  color: var(--emerald);
+  border: 1px solid var(--emerald);
+  border-radius: 999px;
+  padding: 3px 10px;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1);   }
+}
+
+/* ── Hint debajo de labels ───────────────────────────────────── */
+.editor-field-hint {
+  font-size: 12px;
+  color: var(--slate);
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+/* ── Tiempo de lección en el tree ───────────────────────────── */
+.editor-lesson-time {
+  display: inline-block;
+  margin-left: 8px;
+  color: var(--azul);
+  font-family: var(--font-mono);
+}
+
+/* ── Preview: portada ────────────────────────────────────────── */
+.preview-cover {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.preview-cover img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Preview: timer info ─────────────────────────────────────── */
+.preview-timer-info {
+  font-size: 13px;
+  color: var(--azul);
+  background: var(--azul-bg);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+}
+
+.preview-auto-tag {
+  font-size: 10px;
+  background: var(--brass-bg);
+  color: var(--brass);
+  border: 1px solid var(--brass);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* ── Preview: reto ───────────────────────────────────────────── */
+.preview-reto {
+  font-size: 13px;
+  background: rgba(44, 74, 124, 0.06);
+  border-left: 3px solid var(--azul);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 10px;
+  color: var(--ink-soft);
+}
+
+/* ── Editor: preview de imagen inline ───────────────────────── */
+.editor-img-preview {
+  margin-top: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.editor-img-preview img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  display: block;
+}

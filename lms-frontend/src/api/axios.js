@@ -14,9 +14,16 @@ export const conectarLoader = ({ iniciarCarga, finalizarCarga }) => {
   finalizarCargaGlobal = finalizarCarga;
 };
 
+// ── REQUEST: adjuntar token JWT en cada petición ──────────────
 api.interceptors.request.use(
   (config) => {
     if (iniciarCargaGlobal) iniciarCargaGlobal();
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -25,6 +32,7 @@ api.interceptors.request.use(
   }
 );
 
+// ── RESPONSE: manejar 401/403 (token expirado o inválido) ─────
 api.interceptors.response.use(
   (response) => {
     if (finalizarCargaGlobal) finalizarCargaGlobal();
@@ -32,6 +40,19 @@ api.interceptors.response.use(
   },
   (error) => {
     if (finalizarCargaGlobal) finalizarCargaGlobal();
+
+    // Si el token expiró o es inválido, limpiar sesión y redirigir al login
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      const esTokenExpirado = error.response?.data?.mensaje?.includes('expirado') ||
+                              error.response?.data?.mensaje?.includes('inválido');
+
+      if (esTokenExpirado) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        window.location.href = '/login';
+      }
+    }
+
     return Promise.reject(error);
   }
 );

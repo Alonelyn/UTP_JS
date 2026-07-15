@@ -4,12 +4,17 @@
    estudiante para reforzar que aquí se administra, no se consume. */
 
 .docente-head {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .docente-wrap {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -36,25 +41,51 @@
 
 .docente-lista-titulo {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   color: var(--ink);
-  margin-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+/* ─── Grid de cursos ─────────────────────────────────────────── */
+.docente-cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
 }
 
 .docente-curso-ficha h4 {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 18px;
   color: var(--ink);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  margin-top: 10px;
 }
 
-.docente-curso-ficha p {
+.docente-curso-desc {
   font-size: 14px;
   color: var(--slate);
-  margin: 0 0 6px;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+/* Sellos de estadística */
+.docente-curso-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+/* Acciones por curso */
+.docente-curso-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .docente-vacio {
   color: var(--slate);
   font-size: 14px;
+  text-align: center;
+  padding: 40px;
 }

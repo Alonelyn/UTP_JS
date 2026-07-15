@@ -5,6 +5,7 @@
   --surface: #ffffff;
   --border: #e5e7eb;
   --code-bg: #0f172a;
+  --social-bg: rgba(30, 41, 59, 0.8);
 
   --accent: #2563eb;
   --accent-bg: rgba(37, 99, 235, 0.1);
@@ -248,4 +249,101 @@ pre,
   .page-shell {
     padding: 16px;
   }
+}
+
+/* FIX GLOBAL DARK/LIGHT MODE */
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] #root {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] .accordion-item,
+html[data-theme="dark"] .accordion-button,
+html[data-theme="dark"] .accordion-body,
+html[data-theme="dark"] .dropdown-menu,
+html[data-theme="dark"] .list-group-item,
+html[data-theme="dark"] .resource-hub,
+html[data-theme="dark"] .resource-video-card,
+html[data-theme="dark"] .resource-repo-card,
+html[data-theme="dark"] .resource-doc-card,
+html[data-theme="dark"] .resource-boot-card,
+html[data-theme="dark"] .dash-tile,
+html[data-theme="dark"] .dash-course-card,
+html[data-theme="dark"] .dash-plan,
+html[data-theme="dark"] .lesson-side-card,
+html[data-theme="dark"] .lesson-video-card {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
+html[data-theme="dark"] strong {
+  color: var(--text-h) !important;
+}
+
+html[data-theme="dark"] p,
+html[data-theme="dark"] span,
+html[data-theme="dark"] small,
+html[data-theme="dark"] label,
+html[data-theme="dark"] li,
+html[data-theme="dark"] .text-muted {
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .form-control {
+  background: #020617 !important;
+  color: #f8fafc !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .alert,
+html[data-theme="dark"] .alert-info,
+html[data-theme="dark"] .alert-primary,
+html[data-theme="dark"] .alert-warning,
+html[data-theme="dark"] .alert-success,
+html[data-theme="dark"] .alert-danger {
+  background: #111827 !important;
+  color: #e5e7eb !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .accordion-button:not(.collapsed) {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .accordion-button::after {
+  filter: invert(1);
+}
+
+html[data-theme="dark"] .btn-light {
+  background: #e5e7eb !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="dark"] .bg-white {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] a {
+  color: #93c5fd;
+}
+
+html[data-theme="dark"] .badge.bg-secondary {
+  background: #334155 !important;
+  color: #f8fafc !important;
 }

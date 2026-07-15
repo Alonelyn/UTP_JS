@@ -154,8 +154,9 @@ function CursoDetalle() {
                   aria-controls={`collapse-${modulo.id}`}
                 >
                   <div className="w-100 d-flex justify-content-between align-items-center pe-3">
+                    .
                     <span>
-                      Tema {modulo.orden}: {modulo.titulo}
+                      <h3>{modulo.titulo}</h3>
                     </span>
 
                     <small className="text-muted">

@@ -1,7 +1,6 @@
 import '../styles/chatbot.css';
 import { useState } from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import api from '../api/axios';
 
 function Chatbot({ contextoLeccion }) {
@@ -223,12 +222,9 @@ function Chatbot({ contextoLeccion }) {
               mensaje.autor === 'estudiante' ? 'student' : 'ia'
             }`}
           >
-            <div
-              className="chat-bubble"
-              dangerouslySetInnerHTML={{
-                __html: mensaje.texto
-              }}
-            />
+            <div className="chat-bubble" style={{ whiteSpace: 'pre-wrap' }}>
+              {mensaje.texto}
+            </div>
           </div>
         ))}
 

@@ -1,0 +1,92 @@
+.learning-assistant {
+  border-radius: 24px;
+}
+
+.learning-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.learning-eyebrow {
+  color: var(--accent);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.learning-empty {
+  margin-top: 22px;
+  padding: 24px;
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.learning-card,
+.learning-project {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.learning-card.wide {
+  grid-column: span 2;
+}
+
+.learning-card span,
+.learning-project span {
+  color: var(--accent);
+  font-weight: 900;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.learning-card h4,
+.learning-project h4 {
+  color: var(--text-h);
+}
+
+.learning-card ul,
+.learning-card ol {
+  margin-bottom: 0;
+  padding-left: 22px;
+}
+
+.learning-project {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+
+.learning-project strong {
+  font-size: 28px;
+  color: var(--brass);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .learning-head,
+  .learning-project {
+    flex-direction: column;
+  }
+
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-card.wide {
+    grid-column: span 1;
+  }
+}
