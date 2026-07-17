@@ -151,6 +151,7 @@ function Chatbot({ contextoLeccion }) {
       setCargando(false);
     }
   };
+  
   if (minimizado) {
     return (
       <button

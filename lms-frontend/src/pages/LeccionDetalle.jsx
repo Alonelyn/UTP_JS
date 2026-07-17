@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AreaPractica from '../components/AreaPractica';
 import RecursosExternos from '../components/RecursosExternos';
+import UTPBootPanel from '../UTPBoot';
 import api from '../api/axios';
 import '../styles/leccion-detalle.css';
 
@@ -435,6 +436,15 @@ function LeccionDetalle() {
             )}
           </div>
         </div>
+      )}
+
+      {usuario?.rol === 'estudiante' && (
+        <UTPBootPanel
+          usuario={usuario}
+          curso={curso}
+          leccion={leccion}
+          progreso={progreso}
+        />
       )}
     </div>
   );

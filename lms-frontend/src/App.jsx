@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import Chatbot from './components/Chatbot';
 import Navbar from './components/Navbar';
 import DevTool from './components/DevTool';
 
@@ -34,7 +33,7 @@ function Layout() {
   const ocultarNavbar =
     location.pathname === '/' ||
     location.pathname === '/login' ||
-    location.pathname === '/registro'
+    location.pathname === '/registro' ||
     location.pathname === '/verificar-correo';
   
 
@@ -46,7 +45,6 @@ function Layout() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path='/login' element={<Login />} />
-        <Route path="/" element={<Landing />} />
         <Route path='/docente/cursos' element={<CursosDocente />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path="/docente/contenido" element={<GestionContenido />} />
@@ -67,13 +65,6 @@ function Layout() {
 
         
       </Routes>
-
-      {!ocultarNavbar && 
-        usuario?.rol === 'estudiante' && (
-        <Chatbot
-          contextoLeccion="Estás dentro del sistema LMS. Puedes ayudar al estudiante a navegar entre Dashboard, Cursos, Lecciones, Perfil y Módulos."
-        />
-      )}
         <DevTool/>
     </>
   );
