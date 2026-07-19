@@ -145,10 +145,13 @@ const actualizarCurso = async (req, res) => {
       });
     }
 
-    const instructorId = Number(cursoActual.instructor_id);
-    const usuarioId = Number(req.usuario.id);
+    const instructorId = String(cursoActual.instructor_id);
+    const usuarioId = String(req.usuario.id);
 
-    const esPropietario = instructorId === usuarioId;
+    const esPropietario =
+      String(cursoActual.instructor_id) ===
+      String(req.usuario.id);
+
     const esAdmin = req.usuario.rol === 'admin';
 
     if (!esPropietario && !esAdmin) {
@@ -203,8 +206,8 @@ const eliminarCurso = async (req, res) => {
       });
     }
 
-    const instructorId = Number(cursoActual.instructor_id);
-    const usuarioId = Number(req.usuario.id);
+    const instructorId = String(cursoActual.instructor_id);
+    const usuarioId = String(req.usuario.id);
 
     const esPropietario = instructorId === usuarioId;
     const esAdmin = req.usuario.rol === 'admin';

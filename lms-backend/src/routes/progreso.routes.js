@@ -3,11 +3,12 @@ const router = express.Router();
 
 const {
   marcarLeccionCompletada,
+  registrarTiempo,
   obtenerProgresoCurso,
   obtenerRutaCurso
 } = require('../controllers/progreso.controller');
 
-const { verificarToken } = require('../middleware/auth');
+const { verificarToken, requiereRol } = require('../middleware/auth');
 
 router.get(
   '/ruta/:cursoId',
@@ -25,6 +26,13 @@ router.post(
   '/',
   verificarToken,
   marcarLeccionCompletada
+);
+
+router.post(
+  '/tiempo',
+  verificarToken,
+  requiereRol('estudiante'),
+  registrarTiempo
 );
 
 module.exports = router;

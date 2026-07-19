@@ -34,21 +34,21 @@ const chatIA = async (req, res) => {
     }
 
     // 2. Obtener identificadores
-    const usuarioId = Number(usuario?.id);
+    const usuarioId =
+      req.usuario?.id ||
+      usuario?.id;
 
     const cursoId =
-      Number(
-        cursoActual?.id ||
-        cursoActual?.curso_id
-      ) || null;
+      cursoActual?.id ||
+      cursoActual?.curso_id ||
+      null;
 
     const leccionId =
-      Number(
-        leccionActual?.id ||
-        leccionActual?.leccion_id
-      ) || null;
+      leccionActual?.id ||
+      leccionActual?.leccion_id ||
+      null;
 
-    if (!Number.isInteger(usuarioId)) {
+    if (!usuarioId) {
       return res.status(400).json({
         mensaje: 'Usuario inválido'
       });

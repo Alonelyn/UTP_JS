@@ -87,8 +87,59 @@ const obtenerRutaCurso = async (req, res) => {
   }
 };
 
+const registrarTiempo = async (req, res) => {
+  try {
+    const usuario_id = req.usuario.id;
+
+    const {
+      leccion_id,
+      segundos
+    } = req.body;
+
+    if (!leccion_id) {
+      return res.status(400).json({
+        mensaje: 'La lección es obligatoria'
+      });
+    }
+
+    const segundosValidos = Number(segundos);
+
+    if (
+      !Number.isFinite(segundosValidos) ||
+      segundosValidos <= 0
+    ) {
+      return res.status(400).json({
+        mensaje: 'El tiempo registrado no es válido'
+      });
+    }
+
+    const progreso =
+      await Progreso.registrarTiempoActividad({
+        usuario_id,
+        leccion_id,
+        segundos: segundosValidos
+      });
+
+    return res.json({
+      mensaje: 'Tiempo registrado',
+      progreso
+    });
+  } catch (error) {
+    console.error(
+      'Error al registrar tiempo:',
+      error
+    );
+
+    return res.status(500).json({
+      mensaje: 'No se pudo registrar el tiempo',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   marcarLeccionCompletada,
   obtenerProgresoCurso,
-  obtenerRutaCurso
+  obtenerRutaCurso,
+  registrarTiempo
 };

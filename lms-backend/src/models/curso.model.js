@@ -36,9 +36,9 @@ const listarPorInstructor = async (instructorId) => {
   const result = await pool.query(
     `SELECT *
      FROM "Curso"
-     WHERE instructor_id = $1
+     WHERE instructor_id::text = $1::text
      ORDER BY fecha_creacion DESC`,
-    [instructorId]
+    [String(instructorId)]
   );
 
   return result.rows;

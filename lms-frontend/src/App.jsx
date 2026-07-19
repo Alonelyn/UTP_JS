@@ -21,6 +21,9 @@ import VerificarCorreo from './pages/VerificarCorreo';
 import LoaderBridge from './components/LoaderBridge';
 import EditorContenido from './pages/docente/EditorContenido';
 import DocenteDashboard from './pages/docente/DocenteDashboard';
+import GestionAlumnos from './pages/docente/GestionAlumnos';
+import GestionNotas from './pages/docente/GestionNotas';
+import AnaliticaDocente from './pages/docente/AnaliticaDocente';
 import Landing from './pages/Landing';
 
 
@@ -62,6 +65,9 @@ function Layout() {
         <Route path="/verificar-correo" element={<VerificarCorreo />} />
         <Route path="/docente" element={<DocenteDashboard />} />
         <Route path="/docente/editor-contenido" element={<EditorContenido />} />
+        <Route path="/docente/alumnos"element={<GestionAlumnos />}/>
+        <Route path="/docente/notas" element={<GestionNotas />}/>
+        <Route path="/docente/analitica"element={<AnaliticaDocente />}/>
 
         
       </Routes>

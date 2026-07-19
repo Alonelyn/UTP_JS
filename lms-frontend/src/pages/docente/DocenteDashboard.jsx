@@ -19,25 +19,29 @@ function DocenteDashboard() {
     const cargar = async () => {
       try {
         const [cursosRes, modulosRes, leccionesRes] = await Promise.all([
-          api.get('/cursos'),
+          api.get('/cursos/mis-cursos'),
           api.get('/modulos'),
           api.get('/lecciones')
         ]);
 
-        const misCursos = cursosRes.data.filter(
-          (c) => c.instructor_id === usuario?.id
+        const misCursos = cursosRes.data;
+
+        const misCursosIds = misCursos.map(
+          (curso) => String(curso.id)
         );
 
-        const misModulosIds = misCursos.map((c) => c.id);
-
-        const misModulos = modulosRes.data.filter((m) =>
-          misModulosIds.includes(m.curso_id)
+        const misModulos = modulosRes.data.filter(
+          (modulo) =>
+            misCursosIds.includes(String(modulo.curso_id))
         );
 
-        const misModulosMapIds = misModulos.map((m) => m.id);
+        const misModulosIds = misModulos.map(
+          (modulo) => String(modulo.id)
+        );
 
-        const misLecciones = leccionesRes.data.filter((l) =>
-          misModulosMapIds.includes(l.modulo_id)
+        const misLecciones = leccionesRes.data.filter(
+          (leccion) =>
+            misModulosIds.includes(String(leccion.modulo_id))
         );
 
         setStats({
@@ -69,36 +73,52 @@ function DocenteDashboard() {
 
   const acciones = [
     {
-      titulo:  'Mis Cursos',
-      desc:    'Ver y crear los cursos que imparto.',
-      to:      '/docente/cursos',
-      label:   'Gestionar cursos',
-      icono:   '📚',
-      accent:  'emerald'
+      titulo: 'Mis cursos',
+      desc: 'Crear, editar, publicar y administrar los cursos que impartes.',
+      to: '/docente/cursos',
+      label: 'Gestionar cursos',
+      icono: '📚',
+      accent: 'emerald'
     },
     {
-      titulo:  'Editor Visual',
-      desc:    'Editar temas, lecciones, videos, imágenes y configurar el tiempo mínimo.',
-      to:      '/docente/editor-contenido',
-      label:   'Abrir editor',
-      icono:   '✏️',
-      accent:  'azul'
+      titulo: 'Editor de contenido',
+      desc: 'Administrar temas, lecciones, videos, prácticas y recursos.',
+      to: '/docente/editor-contenido',
+      label: 'Abrir editor',
+      icono: '✏️',
+      accent: 'azul'
     },
     {
-      titulo:  'Gestión de contenido',
-      desc:    'Crear nuevos temas y lecciones desde cero.',
-      to:      '/docente/contenido',
-      label:   'Gestionar contenido',
-      icono:   '🗂️',
-      accent:  'brass'
+      titulo: 'Gestión de alumnos',
+      desc: 'Consultar estudiantes inscritos, progreso y última actividad.',
+      to: '/docente/alumnos',
+      label: 'Ver alumnos',
+      icono: '👥',
+      accent: 'brass'
     },
     {
-      titulo:  'Mi perfil',
-      desc:    'Ver y actualizar mi información de cuenta.',
-      to:      '/perfil',
-      label:   'Ver perfil',
-      icono:   '👤',
-      accent:  'slate'
+      titulo: 'Gestión de notas',
+      desc: 'Registrar y consultar calificaciones de los estudiantes.',
+      to: '/docente/notas',
+      label: 'Gestionar notas',
+      icono: '📝',
+      accent: 'coral'
+    },
+    {
+      titulo: 'Analítica académica',
+      desc: 'Detectar estudiantes con retrasos o dificultades de aprendizaje.',
+      to: '/docente/analitica',
+      label: 'Ver analítica',
+      icono: '📊',
+      accent: 'azul'
+    },
+    {
+      titulo: 'Mi perfil',
+      desc: 'Ver y actualizar tu información de cuenta.',
+      to: '/perfil',
+      label: 'Ver perfil',
+      icono: '👤',
+      accent: 'slate'
     }
   ];
 

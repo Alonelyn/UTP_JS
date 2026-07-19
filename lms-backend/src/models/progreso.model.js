@@ -193,8 +193,52 @@ const obtenerRutaConBloqueos = async (usuario_id, curso_id) => {
   });
 };
 
+const registrarTiempoActividad = async ({
+  usuario_id,
+  leccion_id,
+  segundos
+}) => {
+  const segundosValidos = Math.max(
+    0,
+    Math.min(Number(segundos || 0), 120)
+  );
+
+  if (segundosValidos === 0) {
+    return null;
+  }
+
+  const result = await pool.query(
+    `
+    INSERT INTO "Progreso_Leccion"
+    (
+      usuario_id,
+      leccion_id,
+      completado,
+      tiempo_activo
+    )
+    VALUES ($1, $2, false, $3)
+
+    ON CONFLICT (usuario_id, leccion_id)
+    DO UPDATE SET
+      tiempo_activo =
+        COALESCE("Progreso_Leccion".tiempo_activo, 0)
+        + EXCLUDED.tiempo_activo
+
+    RETURNING *
+    `,
+    [
+      usuario_id,
+      leccion_id,
+      segundosValidos
+    ]
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   marcarCompletada,
+  registrarTiempoActividad,
   obtenerProgresoCurso,
   obtenerDuracionMinima,
   obtenerRutaCursoPorLeccion,

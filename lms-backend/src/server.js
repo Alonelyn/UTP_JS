@@ -14,6 +14,7 @@ const iaRoutes = require('./routes/ia.routes');
 const progresoRoutes = require('./routes/progreso.routes');
 const verificacionRoutes = require('./routes/verificacion.routes');
 const suscripcionRoutes = require('./routes/suscripcion.routes');
+const docenteRoutes = require('./routes/docente.routes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/progreso', progresoRoutes);
 app.use('/api/verificacion', verificacionRoutes);
 app.use('/api/suscripciones', suscripcionRoutes);
 app.use('/api/recursos', recursosRoutes);
+app.use('/api/docente', docenteRoutes);
 
 const PORT = process.env.PORT || 3000;
 

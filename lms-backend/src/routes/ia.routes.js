@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { verificarToken } = require('../middleware/auth');
 
 const {
   chatIA,
@@ -21,6 +22,12 @@ router.post(
 router.get(
   '/historial/:usuarioId',
   listarHistorial
+);
+
+router.post(
+  '/chat',
+  verificarToken,
+  chatIA
 );
 
 router.delete(
