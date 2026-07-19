@@ -66,7 +66,29 @@ const obtenerProgresoCurso = async (req, res) => {
   }
 };
 
+const obtenerRutaCurso = async (req, res) => {
+  try {
+    const { cursoId } = req.params;
+
+    const ruta = await Progreso.obtenerRutaConBloqueos(
+      req.usuario.id,
+      cursoId
+    );
+
+    res.json({
+      curso_id: Number(cursoId),
+      lecciones: ruta
+    });
+  } catch (error) {
+    res.status(500).json({
+      mensaje: 'Error al obtener la ruta del curso',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   marcarLeccionCompletada,
-  obtenerProgresoCurso
+  obtenerProgresoCurso,
+  obtenerRutaCurso
 };

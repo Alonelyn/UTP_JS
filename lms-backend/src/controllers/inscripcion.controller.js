@@ -25,10 +25,44 @@ const buscarInscripcion = async (req, res) => {
 
 const crearInscripcion = async (req, res) => {
   try {
-    const inscripcion = await Inscripcion.crear(req.body);
+    const cursoId = Number(req.body.curso_id);
+
+    if (!cursoId) {
+      return res.status(400).json({
+        mensaje: 'El curso es obligatorio'
+      });
+    }
+
+    const usuarioId =
+      req.usuario.rol === 'admin' &&
+      req.body.usuario_id
+        ? Number(req.body.usuario_id)
+        : Number(req.usuario.id);
+
+    const existente =
+      await Inscripcion.buscarPorUsuarioYCurso(
+        usuarioId,
+        cursoId
+      );
+
+    if (existente) {
+      return res.status(409).json({
+        mensaje: 'El usuario ya está inscrito en este curso',
+        inscripcion: existente
+      });
+    }
+
+    const inscripcion = await Inscripcion.crear({
+      usuario_id: usuarioId,
+      curso_id: cursoId
+    });
+
     res.status(201).json(inscripcion);
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error al crear inscripción', error: error.message });
+    res.status(500).json({
+      mensaje: 'Error al crear inscripción',
+      error: error.message
+    });
   }
 };
 
@@ -61,8 +95,77 @@ const eliminarInscripcion = async (req, res) => {
   }
 };
 
+const verificarAccesoCurso = async (req, res) => {
+  try {
+    const usuarioId = req.usuario.id;
+    const cursoId = req.params.cursoId;
+
+    if (!cursoId?.trim()) {
+      return res.status(400).json({
+        mensaje: 'ID de curso inválido',
+        tieneAcceso: false
+      });
+    }
+
+    if (req.usuario.rol === 'admin') {
+      return res.json({
+        tieneAcceso: true,
+        motivo: 'administrador'
+      });
+    }
+
+    if (req.usuario.rol === 'estudiante') {
+      const inscripcion =
+        await Inscripcion.buscarPorUsuarioYCurso(
+          usuarioId,
+          cursoId
+        );
+
+      return res.json({
+        tieneAcceso: Boolean(inscripcion),
+        motivo: inscripcion
+          ? 'inscrito'
+          : 'sin_inscripcion',
+        inscripcion: inscripcion || null
+      });
+    }
+
+    return res.json({
+      tieneAcceso: false,
+      motivo: 'rol_no_autorizado'
+    });
+  } catch (error) {
+    console.error(
+      'Error al verificar acceso al curso:',
+      error
+    );
+
+    res.status(500).json({
+      mensaje: 'Error al verificar acceso al curso',
+      tieneAcceso: false,
+      error: error.message
+    });
+  }
+};
+
+const listarMisInscripciones = async (req, res) => {
+  try {
+    const inscripciones =
+      await Inscripcion.listarPorUsuario(req.usuario.id);
+
+    res.json(inscripciones);
+  } catch (error) {
+    res.status(500).json({
+      mensaje: 'Error al listar tus cursos',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   listarInscripciones,
+  listarMisInscripciones,
+  verificarAccesoCurso,
   buscarInscripcion,
   crearInscripcion,
   actualizarInscripcion,

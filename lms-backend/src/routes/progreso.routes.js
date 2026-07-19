@@ -3,15 +3,28 @@ const router = express.Router();
 
 const {
   marcarLeccionCompletada,
-  obtenerProgresoCurso
+  obtenerProgresoCurso,
+  obtenerRutaCurso
 } = require('../controllers/progreso.controller');
 
 const { verificarToken } = require('../middleware/auth');
 
-// Leer progreso — requiere autenticación
-router.get('/:usuarioId/:cursoId', verificarToken, obtenerProgresoCurso);
+router.get(
+  '/ruta/:cursoId',
+  verificarToken,
+  obtenerRutaCurso
+);
 
-// Marcar completada — requiere autenticación (validación principal anti-fraude)
-router.post('/', verificarToken, marcarLeccionCompletada);
+router.get(
+  '/:usuarioId/:cursoId',
+  verificarToken,
+  obtenerProgresoCurso
+);
+
+router.post(
+  '/',
+  verificarToken,
+  marcarLeccionCompletada
+);
 
 module.exports = router;

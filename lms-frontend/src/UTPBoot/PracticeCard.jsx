@@ -1,30 +1,23 @@
-function PracticeCard({ analisis, leccion }) {
+function PracticeCard({ analisis }) {
   const proyecto = analisis?.proyecto;
 
+  if (!proyecto) {
+    return (
+      <p className="utpboot-muted">
+        Analiza la lección para crear una práctica personalizada.
+      </p>
+    );
+  }
+
   return (
-    <div className="utpboot-content-block">
-      {proyecto ? (
-        <>
-          <span className="utpboot-label">
-            {proyecto.dificultad || 'Práctica personalizada'}
-          </span>
+    <div className="utpboot-practice">
+      <span className="utpboot-badge">
+        {proyecto.dificultad}
+      </span>
 
-          <h4>{proyecto.titulo}</h4>
-          <p>{proyecto.descripcion}</p>
-        </>
-      ) : (
-        <>
-          <p>
-            {leccion?.reto_practico ||
-              'Realiza el ejercicio práctico de la lección para reforzar lo aprendido.'}
-          </p>
+      <h4>{proyecto.titulo}</h4>
 
-          <small className="utpboot-muted">
-            Próximamente UTP-BOOT generará un reto distinto según tu
-            desempeño.
-          </small>
-        </>
-      )}
+      <p>{proyecto.descripcion}</p>
     </div>
   );
 }

@@ -330,7 +330,7 @@ function Dashboard() {
               <h3>{curso.titulo}</h3>
               <p>{curso.descripcion}</p>
               <small>{curso.nivel} · {curso.estado}</small>
-
+              <br />
               <Link className="btn btn-primary mt-3" to="/cursos">
                 Ver curso
               </Link>

@@ -4,7 +4,7 @@ function GoalsCard({ analisis }) {
   if (!objetivos.length) {
     return (
       <p className="utpboot-muted">
-        Analiza la lección para generar objetivos personalizados.
+        Analiza la lección para generar los objetivos.
       </p>
     );
   }
@@ -13,7 +13,6 @@ function GoalsCard({ analisis }) {
     <ul className="utpboot-list">
       {objetivos.map((objetivo, index) => (
         <li key={`${objetivo}-${index}`}>
-          <span>✓</span>
           {objetivo}
         </li>
       ))}

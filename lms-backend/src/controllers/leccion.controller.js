@@ -14,12 +14,33 @@ const buscarLeccion = async (req, res) => {
     const leccion = await Leccion.buscarPorId(req.params.id);
 
     if (!leccion) {
-      return res.status(404).json({ mensaje: 'Lección no encontrada' });
+      return res.status(404).json({
+        mensaje: 'Lección no encontrada'
+      });
+    }
+
+    if (req.usuario.rol === 'estudiante') {
+      const acceso = await Progreso.verificarAccesoLeccion(
+        req.usuario.id,
+        leccion.id
+      );
+
+      if (!acceso.permitido) {
+        return res.status(403).json({
+          mensaje: acceso.motivo ||
+            'Esta lección todavía está bloqueada',
+          bloqueada: true,
+          leccion_anterior: acceso.leccionAnterior || null
+        });
+      }
     }
 
     res.json(leccion);
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error al buscar lección', error: error.message });
+    res.status(500).json({
+      mensaje: 'Error al buscar lección',
+      error: error.message
+    });
   }
 };
 

@@ -121,14 +121,27 @@ function LeccionDetalle() {
       if (!cursoActual) { console.error('Curso no encontrado:', cursoSlug); return; }
 
       const modulosCurso = modulosRes.data
-        .filter((m) => m.curso_id === cursoActual.id)
-        .sort((a, b) => a.orden - b.orden);
+        .filter(
+          (modulo) =>
+            String(modulo.curso_id) === String(cursoActual.id)
+        )
+        .sort(
+          (moduloA, moduloB) =>
+            Number(moduloA.orden) - Number(moduloB.orden)
+        );
 
-      const leccionesOrdenadas = modulosCurso.flatMap((modulo) =>
-        leccionesRes.data
-          .filter((l) => l.modulo_id === modulo.id)
-          .sort((a, b) => a.orden - b.orden)
-      );
+        const leccionesOrdenadas = modulosCurso.flatMap(
+          (modulo) =>
+            leccionesRes.data
+              .filter(
+                (leccionItem) =>
+                  String(leccionItem.modulo_id) === String(modulo.id)
+              )
+              .sort(
+                (leccionA, leccionB) =>
+                  Number(leccionA.orden) - Number(leccionB.orden)
+              )
+        );
 
       const leccionActual = leccionesOrdenadas.find((l) => l.slug === leccionSlug);
       if (!leccionActual) { console.error('Lección no encontrada:', leccionSlug); return; }
@@ -147,7 +160,8 @@ function LeccionDetalle() {
         const progresoRes = await api.get(`/progreso/${usuario.id}/${cursoActual.id}`);
         setProgreso(progresoRes.data);
         const progresoLeccion = progresoRes.data.lecciones.find(
-          (p) => p.leccion_id === leccionActual.id
+          (p) =>
+            String(p.leccion_id) === String(leccionActual.id)
         );
         setCompletada(progresoLeccion?.completado || false);
       }
@@ -314,38 +328,95 @@ function LeccionDetalle() {
         </section>
 
         <aside className="card p-4 lesson-side-card">
-          <h4>Resumen de la lección</h4>
+          <h4>Progreso de la lección</h4>
 
-          <p><strong>Curso:</strong><br />{curso.titulo}</p>
-          <p><strong>Tipo:</strong><br />{leccion.tipo}</p>
-          <p>
-            <strong>Recompensa:</strong><br />
-            {leccion.xp_otorgada ?? 10} XP · {leccion.puntos_otorgados ?? 10} puntos
-          </p>
-
-          {esEstudiante && progreso && (
+          {esEstudiante && progreso ? (
             <>
-              <hr />
-              <p>
-                <strong>Tu avance:</strong><br />
-                {progreso.completadas} de {progreso.total} lecciones
+              <p className="mb-2">
+                <strong>Avance del curso</strong>
               </p>
-              <div className="progress">
+
+              <p className="text-muted mb-2">
+                {progreso.completadas} de {progreso.total} lecciones completadas
+              </p>
+
+              <div className="progress mb-3">
                 <div
                   className="progress-bar"
-                  style={{ width: `${progreso.porcentaje}%` }}
+                  style={{
+                    width: `${progreso.porcentaje || 0}%`
+                  }}
                 >
-                  {progreso.porcentaje}%
+                  {progreso.porcentaje || 0}%
                 </div>
               </div>
-            </>
-          )}
 
-          {esEstudiante && !completada && (
-            <div className="reading-side-indicator">
-              <div className={`timer-dot ${timerActivo ? 'dot-active' : 'dot-paused'}`} />
-              <span>{timerActivo ? 'Leyendo lección' : 'Pausado'}</span>
-            </div>
+              {!completada ? (
+                <>
+                  <div className="lesson-side-status">
+                    <div
+                      className={`timer-dot ${
+                        timerActivo
+                          ? 'dot-active'
+                          : 'dot-paused'
+                      }`}
+                    />
+
+                    <span>
+                      {timerActivo
+                        ? 'Revisando contenido'
+                        : 'Lectura pausada'}
+                    </span>
+                  </div>
+
+                  <div className="mt-3">
+                    <small className="text-muted">
+                      Progreso de esta lección
+                    </small>
+
+                    <div className="progress mt-1">
+                      <div
+                        className="progress-bar"
+                        style={{
+                          width: `${porcentajeTiempo}%`
+                        }}
+                      >
+                        {porcentajeTiempo}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {tiempoRestante > 0 && (
+                    <p className="small text-muted mt-2 mb-0">
+                      Tiempo restante aproximado:{' '}
+                      {formatTiempo(tiempoRestante)}
+                    </p>
+                  )}
+
+                  {tiempoCumplido &&
+                    requierePractica &&
+                    !practicaValidada && (
+                      <div className="alert alert-warning py-2 mt-3 mb-0">
+                        Falta completar la práctica.
+                      </div>
+                    )}
+
+                  {puedeCompletar && (
+                    <div className="alert alert-success py-2 mt-3 mb-0">
+                      Ya puedes completar la lección.
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="alert alert-success mb-0">
+                  ✅ Lección completada
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-muted mb-0">
+              Vista de contenido de la lección.
+            </p>
           )}
         </aside>
       </div>

@@ -9,10 +9,42 @@ const {
   eliminarLeccion
 } = require('../controllers/leccion.controller');
 
-router.get('/', listarLecciones);
-router.get('/:id', buscarLeccion);
-router.post('/', crearLeccion);
-router.put('/:id', actualizarLeccion);
-router.delete('/:id', eliminarLeccion);
+const {
+  verificarToken,
+  requiereRol
+} = require('../middleware/auth');
+
+router.get(
+  '/',
+  verificarToken,
+  listarLecciones
+);
+
+router.get(
+  '/:id',
+  verificarToken,
+  buscarLeccion
+);
+
+router.post(
+  '/',
+  verificarToken,
+  requiereRol('instructor', 'admin'),
+  crearLeccion
+);
+
+router.put(
+  '/:id',
+  verificarToken,
+  requiereRol('instructor', 'admin'),
+  actualizarLeccion
+);
+
+router.delete(
+  '/:id',
+  verificarToken,
+  requiereRol('instructor', 'admin'),
+  eliminarLeccion
+);
 
 module.exports = router;

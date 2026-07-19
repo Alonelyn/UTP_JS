@@ -21,18 +21,47 @@ function CursosDocente() {
     estado: 'borrador'
   });
 
+  const [formEditar, setFormEditar] = useState({
+    titulo: '',
+    slug: '',
+    descripcion: '',
+    precio: 0,
+    nivel: 'principiante',
+    estado: 'borrador'
+  });
+
+  const actualizarCurso = async (e) => {
+    e.preventDefault();
+
+    if (!formEditar.titulo.trim() || !formEditar.slug.trim()) {
+      alert('Título y slug son obligatorios');
+      return;
+    }
+
+    try {
+      await api.put(`/cursos/${cursoEditando.id}`, formEditar);
+
+      alert('Curso actualizado correctamente');
+
+      cerrarEdicion();
+      cargarDatos();
+
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      alert('No se pudo actualizar el curso');
+    }
+  };
+
   const listarDatos = async () => {
     setCargando(true);
     try {
       const [cursosRes, modulosRes, leccionesRes] = await Promise.all([
-        api.get('/cursos'),
+        api.get('/cursos/mis-cursos'),
         api.get('/modulos'),
         api.get('/lecciones')
       ]);
 
-      const misCursos = cursosRes.data.filter(
-        (c) => c.instructor_id === usuario?.id
-      );
+      setCursos(cursosRes.data);
 
       setCursos(misCursos);
       setModulos(modulosRes.data);
@@ -50,21 +79,32 @@ function CursosDocente() {
       return;
     }
 
-    await api.post('/cursos', {
-      ...form,
-      instructor_id: usuario.id
-    });
+    try {
+      await api.post('/cursos', form);
 
-    setForm({
-      titulo: '',
-      slug: '',
-      descripcion: '',
-      precio: 0,
-      nivel: 'principiante',
-      estado: 'borrador'
-    });
+      alert('Curso creado correctamente');
 
-    listarDatos();
+      setForm({
+        titulo: '',
+        slug: '',
+        descripcion: '',
+        precio: 0,
+        nivel: 'principiante',
+        estado: 'borrador'
+      });
+
+      await listarDatos();
+    } catch (error) {
+      console.error(
+        'Error al crear curso:',
+        error.response?.data || error.message
+      );
+
+      alert(
+        error.response?.data?.mensaje ||
+        'No se pudo crear el curso'
+      );
+    }
   };
 
   useEffect(() => { listarDatos(); }, []);

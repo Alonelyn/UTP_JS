@@ -1,25 +1,22 @@
-function RecommendationCard({
-  analisis,
-  leccion
-}) {
-  const consejo =
-    analisis?.consejo ||
-    `Revisa el contenido de “${leccion?.titulo || 'esta lección'}” antes de iniciar la práctica.`;
-
-  const siguientePaso =
-    analisis?.siguientePaso ||
-    'Completa el contenido, realiza el reto práctico y marca la lección como completada.';
+function RecommendationCard({ analisis }) {
+  if (!analisis) {
+    return (
+      <p className="utpboot-muted">
+        Primero realiza el análisis de la lección.
+      </p>
+    );
+  }
 
   return (
-    <div className="utpboot-recommendations">
+    <div className="utpboot-recommendation">
       <div>
-        <span className="utpboot-label">Consejo del tutor</span>
-        <p>{consejo}</p>
+        <strong>Consejo</strong>
+        <p>{analisis.consejo}</p>
       </div>
 
       <div>
-        <span className="utpboot-label">Siguiente paso</span>
-        <p>{siguientePaso}</p>
+        <strong>Siguiente paso</strong>
+        <p>{analisis.siguientePaso}</p>
       </div>
     </div>
   );

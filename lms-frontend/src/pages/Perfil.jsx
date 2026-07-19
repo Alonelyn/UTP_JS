@@ -118,7 +118,7 @@ function Perfil() {
             <span className={`sello ${selloRol} carnet-rol`}>
               {usuario.rol}
             </span>
-
+            <br />
             <label className="btn btn-outline-primary mt-3">
               Subir foto
               <input

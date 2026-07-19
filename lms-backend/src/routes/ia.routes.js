@@ -7,15 +7,25 @@ const {
 } = require('../controllers/ia.controller');
 
 const {
-  verificarToken
-} = require('../middleware/auth');
+  listarHistorial,
+  borrarHistorial
+} = require('../controllers/iaHistorial.controller');
 
-router.post('/chat', verificarToken, chatIA);
+router.post('/chat', chatIA);
 
 router.post(
   '/analizar-leccion',
-  verificarToken,
   analizarLeccion
+);
+
+router.get(
+  '/historial/:usuarioId',
+  listarHistorial
+);
+
+router.delete(
+  '/historial/:usuarioId',
+  borrarHistorial
 );
 
 module.exports = router;
